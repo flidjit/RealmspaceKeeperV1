@@ -26,14 +26,14 @@ class StartupAltVP(AltViewport):
 
         self.pc_button = tk.Button(
             self, bg=self.colors['BG #4'],
-            fg=self.colors['FG #1'],
+            fg=self.colors['Bright #1'],
             font=('Courier', 25),
             text='PC Mode',
             command=self.pc_mode_selected)
         self.pc_button.place(x=480, y=285, width=300, height=50)
         self.gm_button = tk.Button(
             self, bg=self.colors['BG #3'],
-            fg=self.colors['FG #3'],
+            fg=self.colors['Bright #3'],
             font=('Courier', 25),
             text='GM Mode',
             command=self.gm_mode_selected)
@@ -82,18 +82,13 @@ class StartupAltVP(AltViewport):
 
         if self.mother.the_user.player_data.name == "New Player":
             print('New player detected!')
-            self.announcements.destroy()
-            mq_text = marquee_macro['New Player']
-            self.announcements = AOAMarquee(
-                self, text=mq_text, mq_color=self.colors['Chat #2'])
-            self.announcements.place(x=500, y=100, width=250)
             self.usr_name = tk.Entry(
                 self, bg=self.colors['BG #3'],
-                fg=self.colors['FG #2'])
+                fg=self.colors['Normal #2'])
             self.usr_name.place(x=500, y=150, width=250)
             self.usr_email = tk.Entry(
                 self, bg=self.colors['BG #2'],
-                fg=self.colors['FG #1'])
+                fg=self.colors['Bright #1'])
             self.usr_email.place(x=500, y=175, width=250)
             self.usr_male = ttk.Radiobutton(
                 self, text="Male", variable=self.gender_var, value=True)

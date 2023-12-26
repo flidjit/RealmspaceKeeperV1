@@ -20,14 +20,14 @@ class Mother(ShowBase):
         self.startTk()
         self.root = self.tkRoot
         self.root['bg'] = 'black'
-        self.root.geometry("1300x680")
+        self.root.geometry("1280x800")
         self.root.resizable(False, False)
 
         self.mother_frame = tk.Canvas(
             self.root, bg='black',
             highlightthickness=0, borderwidth=0)
         self.mother_frame.place(
-            x=0, y=0, width=1300, height=680)
+            x=0, y=0, width=1280, height=800)
 
         self.the_user = UserBot(self)
         self.the_view = ViewBot(self)

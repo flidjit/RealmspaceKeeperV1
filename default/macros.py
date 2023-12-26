@@ -60,4 +60,33 @@ help_data = {
                         "to the campaign that would read 'Thor says 'One doughnut please!''.\n"
 }
 
-"       "
+welcome_macro = ('\n\n\n\n\n\n\n\n\n\n' +
+                 '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓\n' +
+                 '▓                                           ▓\n' +
+                 '▓                                           ▓\n' +
+                 '▓                                           ▓\n' +
+                 '▓                                           ▓\n' +
+                 '▓                                           ▓\n' +
+                 '▓                                           ▓\n' +
+                 '▓                                           ▓\n' +
+                 '▓                                           ▓\n' +
+                 '▓                                           ▓\n' +
+                 '▓                                           ▓\n' +
+                 '▓                                           ▓\n' +
+                 '▓                                           ▓\n' +
+                 '▓╔═════════════════════════════════════════╗▓\n' +
+                 '▓║             Welcome User!               ║▓\n' +
+                 '▓╠═════════════════════════════════════════╣▓\n' +
+                 '▓║             METANEXUS  v1.0             ║▓\n' +
+                 '▓╚═════════════════════════════════════════╝▓\n' +
+                 '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓\n\n\n')
+
+
+default_pin_paths = {
+    'Capitol #1': 'rec/img/Overmap Icons/capitol2.png',
+    'Star #1': 'rec/img/Overmap Icons/pinkstar.png',
+    'Star #2': 'rec/img/Overmap Icons/cyanstar.png',
+    'Star #3': 'rec/img/Overmap Icons/yellowstar.png',
+    'Pin #1': 'rec/img/Overmap Icons/purplepin.png',
+    'Pin #2': 'rec/img/Overmap Icons/redpin.png',
+    'Pin #3': 'rec/img/Overmap Icons/yellowpin.png'}

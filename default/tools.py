@@ -2,23 +2,23 @@ import os
 import platform
 import sys
 from tkinter import ttk
-from default.datatypes import ui_colors
+from default.datatypes import ui_clrs
 
 
-def get_basic_style(gui_colors=ui_colors):
+def get_basic_style(gui_colors=ui_clrs):
     style = ttk.Style()
     style.theme_use('alt')
 
     style.map(
         'TNotebook.Tab',
-        background=[('selected', gui_colors['FG #2'])])
+        background=[('selected', gui_colors['Bright #2'])])
     style.configure(
         'TNotebook.Tab',
         padding=(0, 0),
         borderwidth=0,
         highlightthickness=0,
         background=gui_colors['BG #1'],
-        foreground=gui_colors['FG #2'])
+        foreground=gui_colors['Normal #2'])
     style.configure(
         'TNotebook',
         padding=(0, 0),
@@ -32,8 +32,8 @@ def get_basic_style(gui_colors=ui_colors):
         highlightthickness=0,
         background=gui_colors['BG #1'],
         troughcolor=gui_colors['BG #3'],
-        slidercolor=gui_colors['FG #1'],
-        arrowcolor=gui_colors['FG #4'],
+        slidercolor=gui_colors['Normal #1'],
+        arrowcolor=gui_colors['Normal #4'],
         arrowsize=15,
         sliderthickness=8)
     style.configure(
@@ -42,14 +42,14 @@ def get_basic_style(gui_colors=ui_colors):
         borderwidth=0,
         highlightthickness=0,
         background=gui_colors['BG #4'],
-        foreground=gui_colors['FG #4'])
+        foreground=gui_colors['Normal #4'])
     style.configure(
         'Treeview',
         padding=(0, 0),
         borderwidth=0,
         highlightthickness=0,
         fieldbackground=gui_colors['BG #3'],
-        foreground=gui_colors['FG #3'])
+        foreground=gui_colors['Normal #3'])
     style.configure(
         "TCombobox",
         padding=(0, 0),
@@ -57,10 +57,10 @@ def get_basic_style(gui_colors=ui_colors):
         highlightthickness=0,
         background=gui_colors['BG #1'],
         selectbackground=gui_colors['BG #4'],
-        foreground=gui_colors['FG #2'],
-        selectforeground=gui_colors['FG #1'],
+        foreground=gui_colors['Normal #2'],
+        selectforeground=gui_colors['Normal #1'],
         arrowsize=15,
-        arrowcolor=gui_colors['FG #3'],
+        arrowcolor=gui_colors['Bright #3'],
         font=("Arial", 12))
     style.configure(
         "TEntry",

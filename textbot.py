@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from default.macros import emote_macro
+from default.macros import emote_macro, welcome_macro
 
 
 command_dict = {
@@ -23,33 +23,40 @@ class TextBot:
             self.frame,
             bg=self.colors['BG #2'],
             fg='white',
+            font=('Consolas', 12),
             highlightthickness=0, borderwidth=0, wrap=tk.WORD)
-        self.log.place(x=0, y=0, width=790, height=142)
+        self.log.place(x=0, y=0, width=790, height=242)
         self.usr_input = tk.Entry(
             self.frame,
             bg=self.colors['BG #1'],
-            fg='white',
-            highlightthickness=0, borderwidth=0)
-        self.usr_input.place(x=0, y=145, width=790, height=20)
+            fg=self.colors['Bright #4'],
+            insertbackground=self.colors['Bright #2'],
+            insertwidth=5,
+            highlightcolor=self.colors['Highlight #2'],
+            highlightbackground=self.colors['Highlight #1'],
+            borderwidth=0)
+        self.usr_input.place(x=10, y=248, height=20, width=760)
         self.usr_input.bind(
             '<Return>', lambda event: self.evaluate_usr_input())
         self.scrollbar = ttk.Scrollbar(
             self.frame, command=self.log.yview)
-        self.scrollbar.place(x=780, y=0, height=165, width=20)
+        self.scrollbar.place(x=780, y=0, height=275, width=20)
         self.log.config(yscrollcommand=self.scrollbar.set)
 
         self.commands = command_dict
-        tags = [['player_tag', 'Chat #1'],
-                ['character_tag', 'Chat #2'],
-                ['chat_macro_tag', 'Chat #3'],
-                ['narrator_tag', 'Chat #4'],
-                ['invalid_command_tag', 'Chat #5'],
-                ['die_roll_tag', 'Chat #6']]
+        tags = [['player_tag', 'Dim #1'],
+                ['character_tag', 'Normal #2'],
+                ['chat_macro_tag', 'Normal #3'],
+                ['narrator_tag', 'Dim #4'],
+                ['invalid_command_tag', 'Warning'],
+                ['die_roll_tag', 'Normal #4']]
         for t in tags:
             self.log.tag_configure(
                 t[0], foreground=self.colors[t[1]])
 
-        self.frame.place(x=15, y=508, width=800, height=165)
+        self.frame.place(x=15, y=508, width=800, height=275)
+        self.log.insert(tk.END, welcome_macro, 'player_tag')
+        self.log.yview(tk.END)
 
     def evaluate_usr_input(self):
         user_input = self.usr_input.get()

@@ -15,7 +15,7 @@ class TabBot:
         self.root_tab_group = DynoTab(
             self.mother.mother_frame, mother=mother)
         self.root_tab_group.place(
-            x=831, y=55, width=454, height=610)
+            x=831, y=55, width=434, height=710)
         self.mother.the_user.player_data.game_mode = GameMode.STARTUP_
         self.change_tab_modes()
 

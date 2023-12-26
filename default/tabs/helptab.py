@@ -10,13 +10,14 @@ class HelpTab(tk.Frame):
         super().__init__(notebook, *args, **kwargs)
         self.mother = mother
         self.colors = self.mother.the_user.player_data.ui_colors
-        self.configure(bg=self.colors['BG #2'])
+        self.configure(bg=self.colors['BG #3'])
 
         self.nameplate = tk.Label(
             self, text="Help",
             font=('courier', 18, 'bold'),
             highlightthickness=0, borderwidth=0,
-            bg=self.colors['BG #4'], fg=self.colors['FG #1'])
+            bg=self.colors['BG #3'],
+            fg=self.colors['Dim #1'])
         self.nameplate.place(x=15, y=15)
 
         self.help_treeview = ttk.Treeview(self)
@@ -26,7 +27,7 @@ class HelpTab(tk.Frame):
         self.help_treeview.config(yscrollcommand=self.treeview_scrollbar.set)
         self.help_treeview.tag_configure(
             "item_tag", background=self.colors['BG #1'],
-            foreground=self.colors['FG #4'])
+            foreground=self.colors['Normal #4'])
         self.help_treeview.place(x=10, y=50, width=410, height=155)
         self.treeview_scrollbar.place(x=410, y=50, height=155)
 
@@ -45,7 +46,7 @@ class HelpTab(tk.Frame):
 
         self.content = tk.Text(
             self, highlightthickness=0, borderwidth=0,
-            bg=self.colors['BG #2'], fg=self.colors['FG #1'],
+            bg=self.colors['BG #2'], fg=self.colors['Bright #1'],
             wrap=tk.WORD, state=tk.DISABLED)
         self.content.place(x=10, y=220, width=420, height=350)
 

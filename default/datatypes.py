@@ -96,6 +96,20 @@ class GameMapData:
         self.creation_date = datetime.now().strftime("%Y - %m - %d")
 
 
+class OverworldPin:
+    def __init__(self, x=0, y=0,
+                 pin_title=None, map_path=None,
+                 pin_image_key=None, note=None):
+        self.title = pin_title
+        self.map_path = map_path
+        self.image_key = pin_image_key
+        self.instance = None
+        self.pin_location = [x, y]
+        self.pin_bound_box = [[x-20, y-20],
+                              [x+52, y+52]]
+        self.note = note
+
+
 class OverworldMapData(GameMapData):
     MAP_TYPE = MapType.OVERWORLD
 
@@ -105,7 +119,7 @@ class OverworldMapData(GameMapData):
         super().__init__(name=name, gm=gm)
         self.pixels_per_mile = pixels_per_mile
         self.image_path = image_path
-        self.pin_locations = {}
+        self.location_pins = {}
 
 
 class TiledMapData(GameMapData):
@@ -133,21 +147,28 @@ class TownMapData(TiledMapData):
         self.services = {}
 
 
-ui_colors = {
-    'BG #1': '#28052C',
-    'BG #2': '#14092E',
-    'BG #3': '#1a1322',
-    'BG #4': '#0b1418',
-    'FG #1': '#e58b2a',
-    'FG #2': '#9b59f2',
-    'FG #3': '#28bcea',
-    'FG #4': '#f2e231',
-    'Chat #1': 'light green',
-    'Chat #2': 'pink',
-    'Chat #3': 'orange',
-    'Chat #4': 'yellow',
-    'Chat #5': 'red',
-    'Chat #6': '#31f2ee'}
+ui_clrs = {
+    'BG #1': '#20170d',
+    'BG #2': '#1a1322',
+    'BG #3': '#0b1418',
+    'BG #4': '#1c1b0d',
+    'Bright #1': '#F99325',
+    'Bright #2': '#974ef9',
+    'Bright #3': '#28bcea',
+    'Bright #4': '#eee25c',
+    'Normal #1': '#d29048',
+    'Normal #2': '#7d4eba',
+    'Normal #3': '#50a1ba',
+    'Normal #4': '#c1b74b',
+    'Dim #1': '#b88F63',
+    'Dim #2': '#715596',
+    'Dim #3': '#517a87',
+    'Dim #4': '#989252',
+    'Highlight #1': '#3e2F51',
+    'Highlight #2': '#ae8150',
+    'System #1': 'white',
+    'System #2': 'grey',
+    'Warning': '#FF7373'}
 
 
 class GameMode(Enum):
@@ -179,7 +200,7 @@ class PlayerData:
             "OpenGL Version": None,
             "Vendor": None,
             "Renderer": None}
-        self.ui_colors = ui_colors
+        self.ui_colors = ui_clrs
 
 
 class CampaignData:

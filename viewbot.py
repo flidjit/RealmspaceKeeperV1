@@ -2,7 +2,7 @@ import tkinter as tk
 from panda3d.core import NodePath, TextureStage
 from direct.showbase.ShowBase import ShowBase
 
-from default.altviewports.newoverworld_altvp import OverworldMapAltVP
+from default.altviewports.overworld_altvp import OverworldMapAltVP
 from default.datatypes import OverworldMapData, ModelData, TileData, BeingData
 from default.altviewports.startup_altvp import StartupAltVP
 

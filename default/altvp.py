@@ -1,6 +1,4 @@
 import tkinter as tk
-from tkinter import filedialog
-from default.datatypes import OverworldMapData
 
 
 class AltViewport(tk.Canvas):
@@ -11,12 +9,14 @@ class AltViewport(tk.Canvas):
         self.backdrop_image_path = backdrop_image_path
         self.backdrop_image = None
         self.backdrop = None
+        self.responding = True
         self.place(x=15, y=55, width=800, height=400)
         self.draw_backdrop()
 
     def draw_backdrop(self):
         if self.backdrop_image_path:
-            self.backdrop_image = tk.PhotoImage(file=self.backdrop_image_path)
+            self.backdrop_image = tk.PhotoImage(
+                file=self.backdrop_image_path)
             self.backdrop = self.create_image(
                 0, 0, anchor=tk.NW, image=self.backdrop_image)
 
@@ -29,23 +29,28 @@ class ClickAndDragViewport(AltViewport):
         self.image_offset = [0, 0]
         self.image_item = None
         self.image = None
-        self.bind("<ButtonPress-3>", self.on_button_press)
-        self.bind("<B3-Motion>", self.on_mouse_drag)
-        self.bind("<ButtonRelease-3>", self.on_button_release)
+        self.bind("<ButtonPress-3>", self.on_right_click)
+        self.bind("<B3-Motion>", self.on_right_click_and_drag)
+        self.bind("<ButtonRelease-3>", self.on_right_click_release)
 
-    def on_button_press(self, event):
-        self.start_x = event.x
-        self.start_y = event.y
+    def on_right_click(self, event):
+        if self.responding:
+            self.start_x = event.x
+            self.start_y = event.y
 
-    def on_mouse_drag(self, event):
-        delta_x = event.x - self.start_x
-        delta_y = event.y - self.start_y
-        self.move(self.image_item, delta_x, delta_y)
-        self.start_x = event.x
-        self.start_y = event.y
+    def on_right_click_and_drag(self, event):
+        if self.responding:
+            delta_x = event.x - self.start_x
+            self.image_offset[0] += delta_x
+            delta_y = event.y - self.start_y
+            self.image_offset[1] += delta_y
+            self.move(self.image_item, delta_x, delta_y)
+            self.start_x = event.x
+            self.start_y = event.y
 
-    def on_button_release(self, event):
-        pass  # You can add additional actions here if needed
+    def on_right_click_release(self, event):
+        if self.responding:
+            pass  # You can add additional actions here if needed
 
     def show_image(self, image_path):
         try:

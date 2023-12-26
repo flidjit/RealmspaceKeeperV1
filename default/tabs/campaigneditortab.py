@@ -2,7 +2,7 @@ import tkinter as tk
 import pickle
 import os
 
-from default.altviewports.newoverworld_altvp import OverworldMapAltVP
+from default.altviewports.overworld_altvp import OverworldMapAltVP
 from default.altvp import ClickAndDragViewport
 from default.aoamarquee import AOAMarquee
 from default.altviewports.newcampaign_altvp import NewCampaignAltVP
@@ -23,7 +23,7 @@ class CampaignEditorTab(tk.Frame):
 
         self.title_lbl = tk.Label(
             self, bg=self.colors['BG #3'],
-            fg=self.colors['FG #3'],
+            fg=self.colors['Dim #3'],
             text='Campaign Editor',
             font=('courier', 20, 'bold'))
         self.title_lbl.place(x=10, y=10)
@@ -31,7 +31,7 @@ class CampaignEditorTab(tk.Frame):
         self.field_str = ''
         self.field_lbl = tk.Label(
             self, bg=self.colors['BG #3'],
-            fg=self.colors['FG #2'],
+            fg=self.colors['Dim #2'],
             text=self.field_str, font=('Times New Roman', 12),
             justify=tk.RIGHT)
         self.field_lbl.place(x=10, y=70)
@@ -40,7 +40,7 @@ class CampaignEditorTab(tk.Frame):
         self.info_str = ''
         self.info_lbl = tk.Label(
             self, bg=self.colors['BG #3'],
-            fg=self.colors['FG #4'],
+            fg=self.colors['Bright #4'],
             text=self.info_str, font=('Times New Roman', 12),
             justify=tk.LEFT)
         self.info_lbl.place(x=160, y=70)
@@ -49,32 +49,32 @@ class CampaignEditorTab(tk.Frame):
         self.location_list = tk.Listbox(
             self, highlightthickness=0, borderwidth=0,
             bg=self.colors['BG #4'],
-            fg=self.colors['FG #1'])
+            fg=self.colors['Bright #1'])
         self.location_list.place(x=10, y=300, height=198, width=433)
 
         sleepy_buttons = [
             ['Load Campaign Button',
-             'FG #2', 'BG #2',
+             'Bright #2', 'BG #2',
              'Load', self.load_campaign_btn_click,
              220, 40, 50, 25],
             ['New Campaign Button',
-             'FG #3', 'BG #3',
+             'Bright #3', 'BG #3',
              'New', self.new_campaign_btn_click,
              280, 40, 50, 25],
             ['Save Campaign Button',
-             'FG #1', 'BG #3',
+             'Bright #1', 'BG #3',
              'Save', self.save_campaign_btn_click,
              370, 40, 50, 25],
             ['Load Map Button',
-             'FG #3', 'BG #1',
+             'Bright #3', 'BG #1',
              'Load', self.load_map_btn_click,
              110, 500, 50, 80],
             ['New Map Button',
-             'FG #3', 'BG #1',
+             'Bright #3', 'BG #1',
              'New', self.new_map_btn_click,
              20, 500, 50, 80],
             ['Delete Map Button',
-             'FG #3', 'BG #1',
+             'Bright #3', 'BG #1',
              'Delete', self.delete_map_btn_click,
              250, 500, 50, 80]]
 
