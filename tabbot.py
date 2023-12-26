@@ -1,8 +1,40 @@
+from default.tabs.campaigneditortab import CampaignEditorTab
+from default.tabs.worldmapeditortab import WorldMapEditorTab
 from default.datatypes import GameMode
 from default.dynotab import DynoTab
 from default.tabs.helptab import HelpTab
-from default.tabs.tabgroups import GMHostTab, GMEditorTab, PCTab
 from default.tabs.dicetab import DiceTab
+
+
+class GMHostTab(DynoTab):
+    NAME = 'GM'
+
+    def __init__(self, notebook, mother=None, *args, **kwargs):
+        super().__init__(notebook, *args, **kwargs)
+        self.mother = mother
+
+
+class GMEditorTab(DynoTab):
+    NAME = 'Editor'
+
+    def __init__(self, notebook, mother=None, *args, **kwargs):
+        super().__init__(notebook, *args, **kwargs)
+        self.mother = mother
+        self.add_custom_tab(
+            CampaignEditorTab,
+            icon_path='default/tabs/img/t_campaign.png')
+        self.add_custom_tab(
+            WorldMapEditorTab,
+            icon_path='default/tabs/img/t_gmap.png')
+
+
+class PCTab(DynoTab):
+    NAME = 'PC'
+
+    def __init__(self, notebook, mother=None, *args, **kwargs):
+        super().__init__(notebook, *args, **kwargs)
+        self.mother = mother
+
 
 
 class TabBot:
@@ -32,7 +64,7 @@ class TabBot:
         elif mode == GameMode.PLAYER_:
             self.set_player_mode_tabs()
         elif mode == GameMode.GM_:
-            self.set_edit_mode_tabs()
+            self.set_gm_mode_tabs()
 
     def set_startup_mode_tabs(self):
         self.root_tab_group.add_custom_tab(
@@ -41,13 +73,16 @@ class TabBot:
             HelpTab, icon_path="default/tabs/img/t_help.png")
 
     def set_player_mode_tabs(self):
+        if self.root_tab_group.get_tab('Editor'):
+            self.root_tab_group.remove_tab('Editor')
         self.root_tab_group.add_custom_tab(PCTab)
 
-    def set_edit_mode_tabs(self):
+    def set_gm_mode_tabs(self):
+        if self.root_tab_group.get_tab('PC'):
+            self.root_tab_group.remove_tab('PC')
         self.root_tab_group.add_custom_tab(
             GMEditorTab, icon_path="default/tabs/img/t_edit.png")
-
-    def set_host_mode_tabs(self):
         self.root_tab_group.add_custom_tab(
             GMHostTab, icon_path="default/tabs/img/t_gm.png")
+
 

@@ -98,12 +98,14 @@ class GameMapData:
 
 class OverworldPin:
     def __init__(self, x=0, y=0,
-                 pin_title=None, map_path=None,
-                 pin_image_key=None, note=None):
-        self.title = pin_title
-        self.map_path = map_path
+                 title_tag=None, map_name=None,
+                 pin_image_key=None,
+                 pin_instance_key=None,
+                 note=None):
+        self.title_tag = title_tag
+        self.instance_key = pin_instance_key
+        self.map_name = map_name
         self.image_key = pin_image_key
-        self.instance = None
         self.pin_location = [x, y]
         self.pin_bound_box = [[x-20, y-20],
                               [x+52, y+52]]
