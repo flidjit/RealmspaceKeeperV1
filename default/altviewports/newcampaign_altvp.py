@@ -1,16 +1,16 @@
 import tkinter as tk
 from tkinter import filedialog
-from default.datatypes import CampaignData, OverworldMapData
-from default.altvp import AltViewport
+from default.engine.datatypes import CampaignData, OverworldMapData
+from default.engine.altvp import AltViewport
 from PIL import Image, ImageTk
-import pickle
-import os
 
 
 class NewCampaignAltVP(AltViewport):
-    def __init__(self, master=None, mother=None):
+    def __init__(self, master=None, mother=None, partner=None):
         super().__init__(master)
         self.mother = mother
+        self.partner_tab = partner
+        self.partner_tab.partner_vp = self
         self.colors = self.mother.the_user.player_data.ui_colors
         self.configure(bg=self.colors['BG #4'])
 

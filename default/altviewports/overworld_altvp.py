@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import filedialog
-from default.altvp import ClickAndDragViewport
-from default.datatypes import OverworldPin
-from default.macros import default_pin_paths
+from default.engine.altvp import ClickAndDragViewport
+from default.engine.datatypes import OverworldPin
+from default.text.macros import default_pin_paths
 
 
 """
@@ -14,10 +14,12 @@ ToDo:
 
 
 class OverworldMapAltVP(ClickAndDragViewport):
-    def __init__(self, master=None, backdrop_image_path=None,
+    def __init__(self, master=None, partner=None, backdrop_image_path=None,
                  overworld_map=None, edit_mode=True, pin_paths=None):
         super().__init__(master, backdrop_image_path)
         self.overworld_map = overworld_map
+        self.partner_tab = partner
+        self.partner_tab.partner_vp = self
         self.edit_mode = edit_mode
 
         if not pin_paths:

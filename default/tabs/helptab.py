@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from default.macros import help_data
+from default.text.macros import help_data
 
 
 class HelpTab(tk.Frame):

@@ -1,16 +1,14 @@
 import tkinter as tk
 from tkinter import ttk
 import os
-from default.altvp import AltViewport
-from default.datatypes import GameMode
-from userbot import UserBot
-from default.aoamarquee import AOAMarquee
-from default.macros import marquee_macro
+from default.engine.altvp import AltViewport
+from default.engine.datatypes import GameMode
+from default.engine.bots.userbot import UserBot
 
 
 class StartupAltVP(AltViewport):
     def __init__(self, master=None, mother=None):
-        super().__init__(master, backdrop_image_path="rec/img/bg1.png")
+        super().__init__(master, backdrop_image_path="rec/ui/bg1.png")
         self.mother = mother
         self.colors = self.mother.the_user.player_data.ui_colors
 
@@ -69,7 +67,7 @@ class StartupAltVP(AltViewport):
             self.mother.the_user.player_data.email = self.usr_email.get()
             self.mother.the_user.player_data.is_male = self.gender_var.get()
         self.mother.the_user.save_player_data()
-        self.mother.the_tabs.change_tab_modes()
+        self.mother.the_tabs.change_mode_tabs()
         self.destroy()
 
     def new_player_check(self):

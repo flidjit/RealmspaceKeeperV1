@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from default.datatypes import DieRoll
+from default.engine.datatypes import DieRoll
 
 
 class DieRow(tk.Frame):

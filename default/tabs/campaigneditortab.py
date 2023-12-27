@@ -2,13 +2,7 @@ import tkinter as tk
 import pickle
 import os
 
-from default.altviewports.overworld_altvp import OverworldMapAltVP
-from default.altvp import ClickAndDragViewport
-from default.aoamarquee import AOAMarquee
 from default.altviewports.newcampaign_altvp import NewCampaignAltVP
-from tkinter import filedialog
-
-from default.datatypes import MapType
 
 
 class CampaignEditorTab(tk.Frame):
@@ -17,8 +11,13 @@ class CampaignEditorTab(tk.Frame):
     def __init__(self, notebook, mother=None, *args, **kwargs):
         super().__init__(notebook, highlightthickness=0, borderwidth=0,
                          *args, **kwargs)
-        self.mother = mother
-        self.colors = mother.the_user.player_data.ui_colors
+        self._mother = mother
+        self._user = mother.the_user
+        self._player = mother.the_user.player_data
+        self._campaign = mother.the_user.campaign_data
+        self._partner_vp = None
+
+        self.colors = self._player.ui_colors
         self.configure(bg=self.colors['BG #3'])
 
         self.title_lbl = tk.Label(
@@ -68,15 +67,15 @@ class CampaignEditorTab(tk.Frame):
             ['Load Map Button',
              'Bright #3', 'BG #1',
              'Load', self.load_map_btn_click,
-             110, 500, 50, 80],
+             110, 500, 80, 30],
             ['New Map Button',
              'Bright #3', 'BG #1',
              'New', self.new_map_btn_click,
-             20, 500, 50, 80],
+             20, 500, 80, 30],
             ['Delete Map Button',
              'Bright #3', 'BG #1',
              'Delete', self.delete_map_btn_click,
-             250, 500, 50, 80]]
+             250, 500, 80, 30]]
 
         self.sleepy_widgets = {}
         for sb in sleepy_buttons:
@@ -101,7 +100,7 @@ class CampaignEditorTab(tk.Frame):
         self.display_campaign_info()
 
     def display_campaign_info(self):
-        self.info_str = self.mother.the_user.get_campaign_info_string()
+        self.info_str = self._mother.the_user.get_campaign_info_string()
         self.info_lbl.config(text=self.info_str)
 
     def display_campaign_fields(self):
@@ -110,18 +109,18 @@ class CampaignEditorTab(tk.Frame):
         self.field_lbl.config(text=self.field_str)
 
     def save_campaign_btn_click(self):
-        self.mother.the_user.save_campaign_data()
+        self._mother.the_user.save_campaign_data()
 
     def load_campaign_btn_click(self):
-        self.mother.the_user.load_campaign_data()
-        self.mother.the_user.add_campaign_headline()
+        self._mother.the_user.load_campaign_data()
+        self._mother.the_user.add_campaign_headline()
         self.populate_location_list()
         self.display_campaign_info()
 
     def new_campaign_btn_click(self):
-        self.mother.the_view.alt_viewport = NewCampaignAltVP(
-            self.mother.root, self.mother)
-        self.mother.the_tabs.disable_tabs()
+        self._mother.the_view.alt_viewport = NewCampaignAltVP(
+            self._mother.root, self._mother)
+        self._mother.the_tabs.disable_tabs()
 
     def new_map_btn_click(self):
         # a popup to create a new map and save it.
@@ -134,7 +133,7 @@ class CampaignEditorTab(tk.Frame):
     def load_map_btn_click(self):
         # after the map is loaded, check it's
         # TYPE and handle it appropriately.
-        campaign_path = self.mother.the_user.get_campaign_filepath()
+        campaign_path = self._mother.the_user.get_campaign_filepath()
         if self.location_list.curselection():
             selected_index = self.location_list.curselection()[0]
             selected_item = self.location_list.get(selected_index)
@@ -158,15 +157,15 @@ class CampaignEditorTab(tk.Frame):
 
     def populate_location_list(self):
         self.location_list.delete(0, tk.END)
-        locations = self.mother.the_user.get_campaign_maps()
+        locations = self._mother.the_user.get_campaign_maps()
         for map_ in locations:
             self.location_list.insert(tk.END, map_)
             self.location_list.update()
 
     def overworld_map_selected(self, overworld_map_data=None):
         # called by 'load_map' if the map type is 'Overworld'.
-        self.mother.the_view.overworld_map_selected(
-            overworld_map_data=overworld_map_data)
+        self._mother.the_view.overworld_map_selected(
+            overworld_map_data=overworld_map_data, partner=self)
 
     def local_map_selected(self):
         # make sure the aoa_window.alt_viewport is None.

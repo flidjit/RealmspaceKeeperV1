@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import tkinter as tk
 import importlib
 
@@ -5,12 +6,12 @@ from panda3d.core import WindowProperties
 from direct.showbase.ShowBase import ShowBase
 from direct.task.TaskManagerGlobal import taskMgr
 
-from default.aoamarquee import AOAMarquee
-from viewbot import ViewBot
-from textbot import TextBot
-from userbot import UserBot
-from tabbot import TabBot
-from default.tools import get_basic_style
+from default.engine.aoamarquee import AOAMarquee
+from default.engine.bots.viewbot import ViewBot
+from default.engine.bots.textbot import TextBot
+from default.engine.bots.userbot import UserBot
+from default.engine.bots.tabbot import TabBot
+from default.engine.tools import get_basic_style
 
 
 class Mother(ShowBase):
@@ -41,7 +42,7 @@ class Mother(ShowBase):
         self.ttk_style = get_basic_style(
             self.the_user.player_data.ui_colors)
 
-        self.bg_image_path = 'rec/img/uibg.png'
+        self.bg_image_path = 'rec/ui/uibg.png'
         self.bg_image = tk.PhotoImage(
             file=self.bg_image_path)
         self.mother_frame.create_image(
@@ -66,9 +67,10 @@ class Mother(ShowBase):
         self.the_system = thesystem.SystemBot(self)
 
     def update(self, task):
+        self.the_system.update_before()
         self.root.update()
         self.the_user.update()
-        self.the_system.update()
+        self.the_system.update_after()
         self.the_view.update()
         return task.cont
 

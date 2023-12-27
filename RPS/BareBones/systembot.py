@@ -16,6 +16,8 @@ class SystemBot:
     def __init__(self, aoa_window=None):
         self.aoa_window = aoa_window
 
-    def update(self):
+    def update_before(self):
         pass
 
+    def update_after(self):
+        pass
