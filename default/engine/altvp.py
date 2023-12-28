@@ -1,5 +1,7 @@
 import tkinter as tk
 
+from MetaNexusv1.default.engine.tools import SaveLoad
+
 
 class AltViewport(tk.Canvas):
     def __init__(self, master=None, backdrop_image_path=None):
@@ -52,13 +54,13 @@ class ClickAndDragViewport(AltViewport):
         if self.responding:
             pass  # You can add additional actions here if needed
 
-    def show_image(self, image_path):
+    def show_image(self, image_data):
         try:
-            new_image = tk.PhotoImage(file=image_path)
+            img_ = SaveLoad.data_to_tk(image_data)
             self.image_item = self.create_image(
                 self.image_offset[0], self.image_offset[1],
-                anchor=tk.NW, image=new_image)
-            self.image = new_image
+                anchor=tk.NW, image=img_)
+            self.image = img_
             self.itemconfig(self.image_item, image=self.image)
         except Exception as e:
             print(f"Error loading image: {e}")

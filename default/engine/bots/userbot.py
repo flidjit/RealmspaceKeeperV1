@@ -73,12 +73,13 @@ class UserBot:
             initialdir=initial_dir, filetypes=[('Campaign Files', '*.cdat')])
         self.campaign_data = SaveLoad.unpickled_thing(file_path)
 
-    def save_map_data(self, game_map=None):
+    def save_map_data(self):
         self.get_campaign_folder_path()
-        if game_map:
+        m = self.current_map_data
+        if m:
             path = (self.campaign_folder_path +
-                    '/maps/' + game_map.name + '.gmap')
-            SaveLoad.pickle_this(game_map, path)
+                    '/maps/' + m.name + '.gmap')
+            SaveLoad.pickle_this(m, path)
 
     def load_map_data(self, map_name):
         self.get_campaign_folder_path()

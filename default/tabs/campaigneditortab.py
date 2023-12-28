@@ -2,7 +2,9 @@ import tkinter as tk
 import pickle
 import os
 
-from default.altviewports.newcampaign_altvp import NewCampaignAltVP
+from MetaNexusv1.default.altviewports.newcampaign_altvp import NewCampaignAltVP
+from MetaNexusv1.default.altviewports.pinmap_altvp import PinMapAltVP
+from MetaNexusv1.default.altviewports.newmap_altvp import NewMapAltVP
 
 
 class CampaignEditorTab(tk.Frame):
@@ -90,12 +92,10 @@ class CampaignEditorTab(tk.Frame):
     def disable_me(self):
         for s in self.sleepy_widgets:
             self.sleepy_widgets[s].config(state='disabled')
-        self.location_list.config(state='disabled')
 
     def enable_me(self):
         for s in self.sleepy_widgets:
             self.sleepy_widgets[s].config(state='normal')
-        self.location_list.config(state='normal')
         self.display_campaign_info()
 
     def display_campaign_info(self):
@@ -114,7 +114,6 @@ class CampaignEditorTab(tk.Frame):
 
     def load_campaign_btn_click(self):
         self._mother.the_user.load_campaign_data()
-        self._mother.the_user.add_campaign_headline()
         self.populate_location_list()
         self.display_campaign_info()
 
@@ -124,44 +123,33 @@ class CampaignEditorTab(tk.Frame):
         self._mother.the_tabs.disable_tabs()
 
     def new_map_btn_click(self):
-        # a popup to create a new map and save it.
-        # refresh the list of maps in the
-        # RPS/(system)/Campaigns/(campaign name)/Maps directory.
-        # select, load and view the new map.
-        self.populate_location_list()
-        print('Create a new map.')
+        self._mother.the_view.alt_viewport = NewMapAltVP(
+            self._mother.root, self._mother, self)
+        self._mother.the_tabs.disable_tabs()
 
     def load_map_btn_click(self):
-        # after the map is loaded, check it's
-        # TYPE and handle it appropriately.
-        campaign_path = self._mother.the_user.get_campaign_filepath()
         if self.location_list.curselection():
             selected_index = self.location_list.curselection()[0]
             selected_item = self.location_list.get(selected_index)
-            file_path = os.path.join(
-                campaign_path, selected_item)
-            try:
-                with open(file_path, 'rb') as file:
-                    loaded_map = pickle.load(file)
-                    # do something with loaded_map
-                print(f"Loaded map from: {file_path}")
-            except FileNotFoundError:
-                print(f"File not found: {file_path}")
-            except Exception as e:
-                print(f"Error loading map: {e}")
-        else:
-            print("No item selected in the listbox.")
+            self._mother.the_user.load_map_data(selected_item)
+            self._mother.the_user.campaign_data.current_map_key = selected_item
+            self.display_campaign_info()
+            self._mother.the_view.alt_viewport = PinMapAltVP(
+                self._mother.root, self._mother, self,
+                overworld_map=self._mother.the_user.current_map_data)
 
     def delete_map_btn_click(self):
         self.populate_location_list()
         print('delete selected map.')
 
     def populate_location_list(self):
+        print('populating')
         self.location_list.delete(0, tk.END)
         locations = self._mother.the_user.get_campaign_maps()
         if locations:
             for map_ in locations:
-                self.location_list.insert(tk.END, map_)
+                key_name, extension = os.path.splitext(map_)
+                self.location_list.insert(tk.END, key_name)
                 self.location_list.update()
 
     def overworld_map_selected(self, overworld_map_data=None):

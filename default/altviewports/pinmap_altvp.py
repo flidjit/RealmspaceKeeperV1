@@ -32,23 +32,13 @@ class PinMapAltVP(ClickAndDragViewport):
         self.pin_instances = {}
         self.selected_pin = None
 
-        self.new_overworld_check()
-        self.show_image(self.overworld_map.map_image_path)
+        self.show_image(self.overworld_map.map_image_data)
         self.initialize_pin_images()
         self.initialize_map_pins()
 
         self.bind("<ButtonPress-1>", self.on_left_click)
         self.bind('<Control-ButtonPress-1>', self.on_ctrl_left_click)
         self.bind("<ButtonRelease-1>", self.on_left_click_release)
-
-    def new_overworld_check(self):
-        # working. maybe useless.
-        if self.overworld_map.map_image_path:
-            pass
-        else:
-            self.overworld_map.map_image_path = filedialog.askopenfilename(
-                title='Select World Map Image',
-                filetypes=[('Image files', '*.png')])
 
     def on_left_click(self, event):
         if self.responding:

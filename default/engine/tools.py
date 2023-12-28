@@ -1,9 +1,12 @@
+import base64
+import io
 import os
 import platform
 import sys
 from tkinter import ttk
 from MetaNexusv1.default.engine.datatypes import ui_clrs
 import pickle
+from PIL import Image, ImageTk
 
 
 def get_basic_style(gui_colors=ui_clrs):
@@ -101,9 +104,25 @@ class SaveLoad:
             print(f"Error reading image: {e}")
             return None
 
+    @staticmethod
+    def image_to_data(img_):
+        temp_path = "temp_image.png"
+        img_.save(temp_path)
+        with open(temp_path, "rb") as image_file:
+            img_data = base64.b64encode(image_file.read())
+        os.remove(temp_path)
+        return img_data
+
+    @staticmethod
+    def data_to_tk(data_):
+        image_data = base64.b64decode(data_)
+        image = Image.open(io.BytesIO(image_data))
+        return ImageTk.PhotoImage(image)
+
+
 class Pencil:
     @staticmethod
-    def a_map_scale_list(map_scale_data, canvas, screen_x=0, screen_y=0):
+    def a_map_scale_object_list(map_scale_data, canvas, screen_x=0, screen_y=0):
         scale_group = []
         scale_text = str(map_scale_data.scale_miles) + ' Mi.'
         line_length = map_scale_data.pixel_width
@@ -138,7 +157,6 @@ class Pencil:
             (int(tk_image.width * min_factor),
              int(tk_image.height * min_factor)))
         return thumbnail
-
 
 
 class ModelHandler:

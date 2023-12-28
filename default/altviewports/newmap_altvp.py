@@ -49,6 +49,7 @@ class PinMapFrame(tk.Canvas):
 
         self.scale_object = []
         self.scale_width_slider = None
+        self.scale_range_slider = None
 
         self.map_file_path = None
         self.select_map_button = tk.Button(
@@ -60,39 +61,22 @@ class PinMapFrame(tk.Canvas):
         self.select_map_button.place(
             x=400, y=340, height=30, width=150)
 
-    def path_to_image(self, path):
-        self.big_map_image = Image.open(path)
-        self.make_map_thumbnail()
-
-    def image_to_data(self):
+    def prep_image(self, path):
         try:
-            temp_path = "temp_image.png"
-            self.big_map_image.save(temp_path)
-            with open(temp_path, "rb") as image_file:
-                self.big_map_data = base64.b64encode(image_file.read())
-            os.remove(temp_path)
-
-            temp_path = "temp_image.png"
-            self.small_map_image.save(temp_path)
-            with open(temp_path, "rb") as image_file:
-                self.small_map_data = base64.b64encode(image_file.read())
-            os.remove(temp_path)
-
+            self.big_map_image = Image.open(path)
+            self.big_map_data = SaveLoad.image_to_data(
+                self.big_map_image)
             self.working_map.map_image_data = self.big_map_data
+            self.big_map_tk = SaveLoad.data_to_tk(
+                self.big_map_data)
+            self.make_map_thumbnail()
+            self.small_map_data = SaveLoad.image_to_data(
+                self.small_map_image)
             self.working_map.thumbnail_image_data = self.small_map_data
+            self.small_map_tk = SaveLoad.data_to_tk(
+                self.small_map_data)
         except Exception as e:
             print(f"Error converting image to data: {e}")
-
-    def data_to_tk(self):
-        try:
-            image_data = base64.b64decode(self.big_map_data)
-            image = Image.open(io.BytesIO(image_data))
-            self.big_map_tk = ImageTk.PhotoImage(image)
-            image_data = base64.b64decode(self.small_map_data)
-            image = Image.open(io.BytesIO(image_data))
-            self.small_map_tk = ImageTk.PhotoImage(image)
-        except Exception as e:
-            print(f"Error converting data to Tkinter PhotoImage: {e}")
 
     def tk_to_canvas(self):
         self.big_map_object = self.map_canvas.create_image(
@@ -106,15 +90,23 @@ class PinMapFrame(tk.Canvas):
         self.map_file_path = filedialog.askopenfilename(
             title='Select World Map Image',
             filetypes=[("Image files", "*.png")])
-        self.path_to_image(self.map_file_path)
-        self.image_to_data()
-        self.data_to_tk()
+        self.prep_image(self.map_file_path)
         self.tk_to_canvas()
         self.draw_map_scale()
         self.scale_width_slider = tk.Scale(
-            self, from_=-75, to=75, orient=tk.HORIZONTAL,
-            showvalue=False, command=self.slider_changed)
+            self, from_=-75, to=75,
+            bg=self.colors['Bright #2'],
+            troughcolor=self.colors['Dim #4'],
+            orient=tk.HORIZONTAL, showvalue=False,
+            command=self.width_slider_changed)
         self.scale_width_slider.place(x=10, y=350, width=150, height=20)
+        self.scale_range_slider = tk.Scale(
+            self, from_=1, to=4,
+            bg=self.colors['Bright #3'],
+            troughcolor=self.colors['Dim #1'],
+            orient=tk.HORIZONTAL, showvalue=False,
+            command=self.range_slider_changed)
+        self.scale_range_slider.place(x=170, y=350, width=100, height=20)
 
     def make_map_thumbnail(self):
         self.small_map_image = Pencil.a_thumbnail_image(
@@ -123,12 +115,26 @@ class PinMapFrame(tk.Canvas):
     def draw_map_scale(self):
         for o in self.scale_object:
             self.map_canvas.delete(o)
-        self.scale_object = Pencil.a_map_scale_list(
+        self.scale_object = Pencil.a_map_scale_object_list(
             self.working_map.map_scale_data,
             self.map_canvas, 20, 280)
 
-    def slider_changed(self, *args):
+    def width_slider_changed(self, *args):
         self.working_map.map_scale_data.pixel_width = 100 + self.scale_width_slider.get()
+        self.draw_map_scale()
+
+    def range_slider_changed(self, *args):
+        r = self.scale_range_slider.get()
+        mi = None
+        if r == 1:
+            mi = 1
+        elif r == 2:
+            mi = 10
+        elif r == 3:
+            mi = 100
+        elif r == 4:
+            mi = 1000
+        self.working_map.map_scale_data.scale_miles = mi
         self.draw_map_scale()
 
 
@@ -189,10 +195,14 @@ class NewMapAltVP(AltViewport):
         self.map_type_widget.place(x=227, y=8)
 
     def create_map(self):
-        print('Confirm changes and close window.')
+        m = self.map_type_widget.working_map
+        m.name = self.map_name_entry.get()
+        m.description = self.map_description_text.get('1.0', tk.END)
+        self.mother.the_user.current_map_data = m
+        self.mother.the_user.campaign_data.current_map_key = m.name
+        self.mother.the_user.save_map_data()
+        self.partner.populate_location_list()
+        self.mother.the_tabs.enable_tabs()
+        self.destroy()
 
 
-# root = tk.Tk()
-# root.configure(width=900, height=530, bg='black')
-# test = NewMapAltVP(root)
-# root.mainloop()

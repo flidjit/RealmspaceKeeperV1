@@ -89,9 +89,11 @@ class MapType(Enum):
 
 
 class GameMapData:
-    def __init__(self, name='Default Map', gm='Fox'):
+    def __init__(self, name='Default Map', gm='Fox',
+                 description='A Map!!'):
         self.name = name
         self.gm = gm
+        self.description = description
         self.creation_date = datetime.now().strftime("%Y - %m - %d")
 
 
@@ -126,12 +128,11 @@ class PinMapData(GameMapData):
     MAP_TYPE = MapType.PIN
 
     def __init__(self, name='Earth', gm='Fox',
-                 image_path='rec/worldmaps/worldmap1.png',
                  image_data=None, thumbnail_image_data=None,
-                 map_scale_data=PinMapScale()):
-        super().__init__(name=name, gm=gm)
+                 map_scale_data=PinMapScale(),
+                 description='A Pin Map!'):
+        super().__init__(name=name, gm=gm, description=description)
         self.map_scale_data = map_scale_data
-        self.map_image_path = image_path
         self.map_image_data = image_data
         self.thumbnail_image_data = thumbnail_image_data
         self.location_pins = {}
