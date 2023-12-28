@@ -47,7 +47,7 @@ class PinMapFrame(tk.Canvas):
 
         self.byte_test = None
 
-        self.scale_object = []
+        self.scale_object_list = []
         self.scale_width_slider = None
         self.scale_range_slider = None
 
@@ -113,9 +113,9 @@ class PinMapFrame(tk.Canvas):
             self.big_map_image)
 
     def draw_map_scale(self):
-        for o in self.scale_object:
+        for o in self.scale_object_list:
             self.map_canvas.delete(o)
-        self.scale_object = Pencil.a_map_scale_object_list(
+        self.scale_object_list = Pencil.a_map_scale_object_list(
             self.working_map.map_scale_data,
             self.map_canvas, 20, 280)
 
@@ -203,6 +203,8 @@ class NewMapAltVP(AltViewport):
         self.mother.the_user.save_map_data()
         self.partner.populate_location_list()
         self.mother.the_tabs.enable_tabs()
-        self.destroy()
+        self.exit_me()
 
+    def exit_me(self):
+        self.destroy()
 

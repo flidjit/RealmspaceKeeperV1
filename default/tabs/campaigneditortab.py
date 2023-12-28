@@ -129,6 +129,8 @@ class CampaignEditorTab(tk.Frame):
 
     def load_map_btn_click(self):
         if self.location_list.curselection():
+            if self._mother.the_view.alt_viewport:
+                self._mother.the_view.alt_viewport.exit_me()
             selected_index = self.location_list.curselection()[0]
             selected_item = self.location_list.get(selected_index)
             self._mother.the_user.load_map_data(selected_item)
@@ -137,6 +139,10 @@ class CampaignEditorTab(tk.Frame):
             self._mother.the_view.alt_viewport = PinMapAltVP(
                 self._mother.root, self._mother, self,
                 overworld_map=self._mother.the_user.current_map_data)
+
+    def receive_map(self, game_map):
+        self._mother.the_user.current_map_data = game_map
+        self._mother.the_user.save_map_data()
 
     def delete_map_btn_click(self):
         self.populate_location_list()

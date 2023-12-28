@@ -69,7 +69,7 @@ class StartupAltVP(AltViewport):
             self.mother.the_user.player_data.is_male = self.gender_var.get()
         self.mother.the_user.save_player_data()
         self.mother.the_tabs.change_mode_tabs()
-        self.destroy()
+        self.exit_me()
 
     def new_player_check(self):
 
@@ -105,4 +105,5 @@ class StartupAltVP(AltViewport):
         except Exception as e:
             print(f"Error scanning for RPS directories: {e}")
 
-
+    def exit_me(self):
+        self.destroy()

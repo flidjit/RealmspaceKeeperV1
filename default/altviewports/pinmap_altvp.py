@@ -4,6 +4,7 @@ from default.engine.altvp import ClickAndDragViewport
 from default.engine.datatypes import PinMapPin
 from default.text.macros import default_pin_paths
 
+from MetaNexusv1.default.engine.tools import Pencil
 
 """
 ToDo:
@@ -23,6 +24,7 @@ class PinMapAltVP(ClickAndDragViewport):
         self.colors = self.mother.the_user.player_data.ui_colors
         self.overworld_map = overworld_map
         self.gm_mode = gm_mode
+        self.scale_object_list = []
 
         if not pin_paths:
             self.pin_paths = default_pin_paths
@@ -35,10 +37,13 @@ class PinMapAltVP(ClickAndDragViewport):
         self.show_image(self.overworld_map.map_image_data)
         self.initialize_pin_images()
         self.initialize_map_pins()
+        self.draw_map_scale()
 
         self.bind("<ButtonPress-1>", self.on_left_click)
         self.bind('<Control-ButtonPress-1>', self.on_ctrl_left_click)
         self.bind("<ButtonRelease-1>", self.on_left_click_release)
+
+
 
     def on_left_click(self, event):
         if self.responding:
@@ -105,11 +110,18 @@ class PinMapAltVP(ClickAndDragViewport):
                 map_name=self.overworld_map.name)
             self.overworld_map.location_pins[pin_instance_key] = new_pin
             pin_image = self.pin_images[pin_image_key]
-            self.pin_instances[pin_instance_key] = self.create_image(
-                x, y, anchor='center', image=pin_image)
+            self.add_pin_instance(
+                pin_image, pin_instance_key,
+                x, y)
+            self.draw_map_scale()
             print('pin added at: ' + pin_instance_key)
         else:
             print('There is already a pin with that name.')
+
+    def add_pin_instance(self, pin_image, pin_key, x, y):
+        self.pin_instances[pin_key] = self.create_image(
+            x, y, anchor='center', image=pin_image)
+        self.update()
 
     def initialize_pin_images(self):
         for path_key in self.pin_paths:
@@ -123,5 +135,15 @@ class PinMapAltVP(ClickAndDragViewport):
             x = this_pin.pin_location[0]
             y = this_pin.pin_location[1]
             pin_image = self.pin_images[this_pin.image_key]
-            self.add_pin_instance(pin_image=pin_image, x=x, y=y)
+            self.add_pin_instance(pin_image=pin_image, pin_key=pin, x=x, y=y)
+
+    def draw_map_scale(self):
+        for o in self.scale_object_list:
+            self.delete(o)
+        self.scale_object_list = Pencil.a_map_scale_object_list(
+            self.overworld_map.map_scale_data, self, 20, 380)
+
+    def exit_me(self):
+        self.partner.receive_map(self.overworld_map)
+        self.destroy()
 

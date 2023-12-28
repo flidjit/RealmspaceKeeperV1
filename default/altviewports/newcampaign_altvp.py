@@ -88,10 +88,12 @@ class NewCampaignAltVP(AltViewport):
             technology_level=tl, fantasy_level=fl)
         self.mother.the_user.new_campaign(campaign_data=cp)
         self.mother.the_tabs.enable_tabs()
-        self.destroy()
+        self.exit_me()
         self.mother.the_user.save_campaign_data()
         self.partner.populate_location_list()
 
+    def exit_me(self):
+        self.destroy()
 
 # root = tk.Tk()
 # root.configure(width=900, height=530, bg='black')
