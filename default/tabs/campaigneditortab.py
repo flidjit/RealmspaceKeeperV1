@@ -15,7 +15,6 @@ class CampaignEditorTab(tk.Frame):
         self._user = mother.the_user
         self._player = mother.the_user.player_data
         self._campaign = mother.the_user.campaign_data
-        self._partner_vp = None
 
         self.colors = self._player.ui_colors
         self.configure(bg=self.colors['BG #3'])
@@ -49,7 +48,7 @@ class CampaignEditorTab(tk.Frame):
             self, highlightthickness=0, borderwidth=0,
             bg=self.colors['BG #4'],
             fg=self.colors['Bright #1'])
-        self.location_list.place(x=10, y=300, height=198, width=433)
+        self.location_list.place(x=10, y=300, height=198, width=400)
 
         sleepy_buttons = [
             ['Load Campaign Button',
@@ -105,11 +104,13 @@ class CampaignEditorTab(tk.Frame):
 
     def display_campaign_fields(self):
         self.field_str = 'Campaign Name:\nGM:\nRPG System:\nTechnology Level:\n'
-        self.field_str += 'Fantasy Level:\nWorld Map:\n# of players:\nDescription Headline:\n'
+        self.field_str += 'Fantasy Level:\nWorld Map:\nCurrent Map:\n'
+        self.field_str += '# of players:\nDescription Headline:\n'
         self.field_lbl.config(text=self.field_str)
 
     def save_campaign_btn_click(self):
         self._mother.the_user.save_campaign_data()
+        self.populate_location_list()
 
     def load_campaign_btn_click(self):
         self._mother.the_user.load_campaign_data()
@@ -119,7 +120,7 @@ class CampaignEditorTab(tk.Frame):
 
     def new_campaign_btn_click(self):
         self._mother.the_view.alt_viewport = NewCampaignAltVP(
-            self._mother.root, self._mother)
+            self._mother.root, self._mother, self)
         self._mother.the_tabs.disable_tabs()
 
     def new_map_btn_click(self):
@@ -158,9 +159,10 @@ class CampaignEditorTab(tk.Frame):
     def populate_location_list(self):
         self.location_list.delete(0, tk.END)
         locations = self._mother.the_user.get_campaign_maps()
-        for map_ in locations:
-            self.location_list.insert(tk.END, map_)
-            self.location_list.update()
+        if locations:
+            for map_ in locations:
+                self.location_list.insert(tk.END, map_)
+                self.location_list.update()
 
     def overworld_map_selected(self, overworld_map_data=None):
         # called by 'load_map' if the map type is 'Overworld'.

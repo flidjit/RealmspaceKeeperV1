@@ -90,7 +90,7 @@ class TextBot:
         command = words[0] if words else ""
         message = words[1] if len(words) > 1 else ""
 
-        self.log.insert(tk.END, f"{character_name} says: {message}\n",
+        self.log.insert(tk.END, f'{character_name} says, " {message} "\n',
                         'character_tag')
         self.log.yview(tk.END)
 

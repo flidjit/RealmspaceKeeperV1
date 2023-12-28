@@ -1,9 +1,8 @@
 import tkinter as tk
-from panda3d.core import NodePath, TextureStage
-
-from default.altviewports.overworld_altvp import OverworldMapAltVP
-from MetaNexusv1.default.engine.datatypes import TileData, BeingData
+from default.altviewports.pinmap_altvp import PinMapAltVP
 from default.altviewports.startup_altvp import StartupAltVP
+
+from MetaNexusv1.default.engine.tools import SaveLoad
 
 
 class ViewBot:
@@ -14,27 +13,32 @@ class ViewBot:
 
     def __init__(self, mother=None):
         self.mother = mother
+        self.campaign_folder_path = None
         self.viewport = tk.Frame(
             self.mother.mother_frame, bg='red')
         self.viewport.place(
             x=15, y=55, width=800, height=400)
-        self.alt_viewport = StartupAltVP(
-            self.mother.mother_frame, mother=self.mother)
-        self.map_data = None
+        self.alt_viewport = None
         self.models = {}
         self.textures = {}
         self.cam = None
         self.cursor_3D = None
 
-    def load_map(self, map_data):
-        print('load the stage')
+        self.display_startup_altvp()
 
-    def show_overworld_map(self, overworld_map_data=None, partner=None):
+    def display_overworld_altvp(self, overworld_map_data=None,
+                                partner=None):
         if overworld_map_data:
-            self.alt_viewport = OverworldMapAltVP(
+            self.alt_viewport = PinMapAltVP(
                 master=self.mother.root,
+                mother=self.mother,
                 overworld_map=overworld_map_data,
                 partner=partner)
+
+    def display_startup_altvp(self, partner=None):
+        self.alt_viewport = StartupAltVP(
+            master=self.mother.mother_frame,
+            mother=self.mother, partner=partner)
 
     def update(self):
         # Perform any necessary updates in the stage

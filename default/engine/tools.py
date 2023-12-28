@@ -2,7 +2,8 @@ import os
 import platform
 import sys
 from tkinter import ttk
-from default.engine.datatypes import ui_clrs
+from MetaNexusv1.default.engine.datatypes import ui_clrs
+import pickle
 
 
 def get_basic_style(gui_colors=ui_clrs):
@@ -68,15 +69,76 @@ def get_basic_style(gui_colors=ui_clrs):
     return style
 
 
-def serialized_image(image_path):
-    try:
-        with open(image_path, 'rb') as image_file:
-            # Read image data as bytes
-            image_data = image_file.read()
-        return image_data
-    except Exception as e:
-        print(f"Error reading image: {e}")
-        return None
+class SaveLoad:
+    @staticmethod
+    def pickle_this(thing, path):
+        if thing and path:
+            # Create the directory if it doesn't exist
+            directory = os.path.dirname(path)
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+
+            try:
+                with open(path, 'wb') as file:
+                    pickle.dump(thing, file, protocol=pickle.HIGHEST_PROTOCOL)
+            except Exception as e:
+                print(f"Error saving thing: {e}")
+
+    @staticmethod
+    def unpickled_thing(path):
+        if path:
+            with open(path, 'rb') as file:
+                thing = pickle.load(file)
+                return thing
+
+    @staticmethod
+    def serialized_image(image_path):
+        try:
+            with open(image_path, 'rb') as image_file:
+                image_data = image_file.read()
+            return image_data
+        except Exception as e:
+            print(f"Error reading image: {e}")
+            return None
+
+class Pencil:
+    @staticmethod
+    def a_map_scale_list(map_scale_data, canvas, screen_x=0, screen_y=0):
+        scale_group = []
+        scale_text = str(map_scale_data.scale_miles) + ' Mi.'
+        line_length = map_scale_data.pixel_width
+        scale_group.append(
+            canvas.create_text(
+                screen_x+line_length/2, screen_y-15,
+                text=scale_text,
+                fill=map_scale_data.text_color))
+        scale_group.append(
+            canvas.create_line(
+                screen_x, screen_y,
+                line_length + screen_x, screen_y,
+                fill=map_scale_data.scale_color, width=2))
+        scale_group.append(
+            canvas.create_line(
+                screen_x, screen_y-5,
+                screen_x, screen_y+5,
+                fill=map_scale_data.scale_color, width=2))
+        scale_group.append(
+            canvas.create_line(
+                line_length + screen_x, screen_y-5,
+                line_length + screen_x, screen_y+5,
+                fill=map_scale_data.scale_color, width=2))
+        return scale_group
+
+    @staticmethod
+    def a_thumbnail_image(tk_image, thumbnail_width=100, thumbnail_height=100):
+        width_factor = thumbnail_width / tk_image.width
+        height_factor = thumbnail_height / tk_image.height
+        min_factor = min(width_factor, height_factor)
+        thumbnail = tk_image.resize(
+            (int(tk_image.width * min_factor),
+             int(tk_image.height * min_factor)))
+        return thumbnail
+
 
 
 class ModelHandler:

@@ -83,10 +83,9 @@ class TileData(ModelData):
 
 
 class MapType(Enum):
-    OVERWORLD = "Overworld"
+    PIN = "Overworld"
     HEX = 'Hex grid'
-    TOWN = "Town"
-    LOCAL = "Local"
+    GRID = "Tiled 3d Map"
 
 
 class GameMapData:
@@ -96,7 +95,7 @@ class GameMapData:
         self.creation_date = datetime.now().strftime("%Y - %m - %d")
 
 
-class OverworldPin:
+class PinMapPin:
     def __init__(self, x=0, y=0,
                  title_tag=None, map_name=None,
                  pin_image_key=None,
@@ -108,31 +107,45 @@ class OverworldPin:
         self.image_key = pin_image_key
         self.pin_location = [x, y]
         self.pin_bound_box = [[x-20, y-20],
-                              [x+52, y+52]]
+                              [x+20, y+20]]
         self.note = note
 
 
-class OverworldMapData(GameMapData):
-    MAP_TYPE = MapType.OVERWORLD
+class PinMapScale:
+    def __init__(self, scale_miles=100, pixel_width=150,
+                 scale_color='black', text_color='white',
+                 scale_image_data=None):
+        self.scale_miles = scale_miles
+        self.pixel_width = pixel_width
+        self.scale_color = scale_color
+        self.text_color = text_color
+        self.scale_image_data = scale_image_data
+
+
+class PinMapData(GameMapData):
+    MAP_TYPE = MapType.PIN
 
     def __init__(self, name='Earth', gm='Fox',
                  image_path='rec/worldmaps/worldmap1.png',
-                 pixels_per_mile=10):
+                 image_data=None, thumbnail_image_data=None,
+                 map_scale_data=PinMapScale()):
         super().__init__(name=name, gm=gm)
-        self.pixels_per_mile = pixels_per_mile
-        self.image_path = image_path
+        self.map_scale_data = map_scale_data
+        self.map_image_path = image_path
+        self.map_image_data = image_data
+        self.thumbnail_image_data = thumbnail_image_data
         self.location_pins = {}
 
 
 class TiledMapData(GameMapData):
+    MAP_TYPE = MapType.GRID
+
     def __init__(self):
         super().__init__()
         self.tiles = {}
 
 
 class LocalMapData(TiledMapData):
-    MAP_TYPE = MapType.LOCAL
-
     def __init__(self):
         super().__init__()
         self.npcs = {}
@@ -141,8 +154,6 @@ class LocalMapData(TiledMapData):
 
 
 class TownMapData(TiledMapData):
-    MAP_TYPE = MapType.TOWN
-
     def __init__(self):
         super().__init__()
         self.structures = {}
@@ -211,26 +222,29 @@ class CampaignData:
                  technology_level=1,
                  fantasy_level=1,
                  description='---',
-                 world_map_key='---',
                  current_map_key='---',
-                 world_map_filepath=None):
+                 current_map_path=None,
+                 world_map_path=None,
+                 world_map_key='---',
+                 hq_map_path=None,
+                 hq_map_key='---'):
         self.name = name
         self.gm = gm
         self.rp_system = rp_system
         self.technology_level = technology_level
         self.fantasy_level = fantasy_level
         self.description = description
+        self.current_map_path = current_map_path
         self.current_map_key = current_map_key
         self.world_map_key = world_map_key
-        self.world_map_file_path = world_map_filepath
+        self.world_map_path = world_map_path
+        self.hq_map_key = hq_map_key
+        self.hq_map_path = hq_map_path
         self.headlines = [
             " A new campaign ... ",
             " Headlines need updating! ",
             " So, what's next boss?  ",
             " Load a campaign or create a new one! "]
-        self.pc_party = {}
-        self.npc_sidebar = {}
         self.irl_start_date = datetime.now().strftime("%Y - %m - %d")
-        self.in_game_start_date = None
-        self.in_game_current_date = None
+        self.pc_party = {}
 

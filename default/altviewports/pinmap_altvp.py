@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog
 from default.engine.altvp import ClickAndDragViewport
-from default.engine.datatypes import OverworldPin
+from default.engine.datatypes import PinMapPin
 from default.text.macros import default_pin_paths
 
 
@@ -13,14 +13,16 @@ ToDo:
 """
 
 
-class OverworldMapAltVP(ClickAndDragViewport):
-    def __init__(self, master=None, partner=None, backdrop_image_path=None,
-                 overworld_map=None, edit_mode=True, pin_paths=None):
+class PinMapAltVP(ClickAndDragViewport):
+    def __init__(self, master=None, mother=None, partner=None,
+                 backdrop_image_path=None,
+                 overworld_map=None, gm_mode=True, pin_paths=None):
         super().__init__(master, backdrop_image_path)
+        self.mother = mother
+        self.partner = partner
+        self.colors = self.mother.the_user.player_data.ui_colors
         self.overworld_map = overworld_map
-        self.partner_tab = partner
-        self.partner_tab.partner_vp = self
-        self.edit_mode = edit_mode
+        self.gm_mode = gm_mode
 
         if not pin_paths:
             self.pin_paths = default_pin_paths
@@ -31,7 +33,7 @@ class OverworldMapAltVP(ClickAndDragViewport):
         self.selected_pin = None
 
         self.new_overworld_check()
-        self.show_image(self.overworld_map.image_path)
+        self.show_image(self.overworld_map.map_image_path)
         self.initialize_pin_images()
         self.initialize_map_pins()
 
@@ -41,10 +43,10 @@ class OverworldMapAltVP(ClickAndDragViewport):
 
     def new_overworld_check(self):
         # working. maybe useless.
-        if self.overworld_map.image_path:
+        if self.overworld_map.map_image_path:
             pass
         else:
-            self.overworld_map.image_path = filedialog.askopenfilename(
+            self.overworld_map.map_image_path = filedialog.askopenfilename(
                 title='Select World Map Image',
                 filetypes=[('Image files', '*.png')])
 
@@ -60,7 +62,7 @@ class OverworldMapAltVP(ClickAndDragViewport):
 
     def on_ctrl_left_click(self, event):
         if self.responding:
-            if self.edit_mode:
+            if self.gm_mode:
                 existing_pin = self.get_pin_at_location(event.x, event.y)
                 if existing_pin is None:
                     self.add_new_pin(x=event.x, y=event.y)
@@ -106,7 +108,7 @@ class OverworldMapAltVP(ClickAndDragViewport):
         iof = self.image_offset
         pin_instance_key = '(' + str(x-iof[0]) + ', ' + str(y-iof[1]) + ')'
         if pin_instance_key not in self.overworld_map.location_pins:
-            new_pin = OverworldPin(
+            new_pin = PinMapPin(
                 x=x-iof[0], y=y-iof[1], title_tag=title_tag,
                 pin_image_key=pin_image_key,
                 pin_instance_key=pin_instance_key,

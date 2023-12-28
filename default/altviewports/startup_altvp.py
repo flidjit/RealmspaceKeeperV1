@@ -7,9 +7,10 @@ from default.engine.bots.userbot import UserBot
 
 
 class StartupAltVP(AltViewport):
-    def __init__(self, master=None, mother=None):
+    def __init__(self, master=None, mother=None, partner=None):
         super().__init__(master, backdrop_image_path="rec/ui/bg1.png")
         self.mother = mother
+        self.partner = partner
         self.colors = self.mother.the_user.player_data.ui_colors
 
         rps_list = tk.StringVar()  # ??
@@ -71,12 +72,6 @@ class StartupAltVP(AltViewport):
         self.destroy()
 
     def new_player_check(self):
-        try:
-            self.mother.the_user.load_player_data()
-            print("Returning player: " + self.mother.the_user.player_data.name)
-        except FileNotFoundError:
-            self.mother.the_user = UserBot()
-            self.mother.the_user.save_player_data()
 
         if self.mother.the_user.player_data.name == "New Player":
             print('New player detected!')

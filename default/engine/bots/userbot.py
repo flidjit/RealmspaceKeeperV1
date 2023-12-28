@@ -1,8 +1,9 @@
-import pickle
 from tkinter import filedialog
-
-from default.engine.datatypes import PlayerData, CampaignData, OverworldMapData
+from default.engine.datatypes import PlayerData, CampaignData, PinMapData
 import os
+from default.engine.tools import SaveLoad
+
+from MetaNexusv1.default.engine.datatypes import GameMapData
 
 
 class UserBot:
@@ -14,7 +15,11 @@ class UserBot:
         self.mother = mother
         self.player_data = PlayerData()
         self.campaign_data = CampaignData()
+        self.current_map_data = GameMapData()
+        self.campaign_folder_path = ''
         self.initialize()
+        self.get_campaign_folder_path()
+        self.load_player_data()
 
     def initialize(self):
         self.configure_keys()
@@ -38,34 +43,49 @@ class UserBot:
         self.player_data.key_map[control_name] = control_state
 
     def save_player_data(self):
-        with open('usr/player_config.pcfg', 'wb') as file:
-            pickle.dump(self.player_data, file)
+        SaveLoad.pickle_this(self.player_data, 'usr/player_config.pcfg')
 
     def load_player_data(self):
-        with open('usr/player_config.pcfg', 'rb') as file:
-            self.player_data = pickle.load(file)
+        try:
+            self.player_data = SaveLoad.unpickled_thing('usr/player_config.pcfg')
+            print("Returning player: " + self.player_data.name)
+        except FileNotFoundError:
+            self.player_data = PlayerData()
+            self.save_player_data()
+
+    def new_campaign(self, campaign_data=None):
+        if campaign_data:
+            self.campaign_data = campaign_data
+            self.campaign_data.gm = self.player_data.name
+            self.campaign_data.rp_system = self.player_data.current_rps_key
 
     def save_campaign_data(self):
-        campaign_folder_path = 'RPS/' + self.campaign_data.rp_system
-        campaign_folder_path += '/Campaigns/' + self.campaign_data.name
-        if not os.path.exists(campaign_folder_path):
-            os.makedirs(campaign_folder_path)
-        path = campaign_folder_path + '.cdat'
-        with open(path, 'wb') as file:
-            pickle.dump(self.campaign_data, file, protocol=pickle.HIGHEST_PROTOCOL)
+        self.get_campaign_folder_path()
+        if not os.path.exists(self.campaign_folder_path):
+            os.makedirs(self.campaign_folder_path)
+        path = self.campaign_folder_path + '.cdat'
+        SaveLoad.pickle_this(self.campaign_data, path)
 
     def load_campaign_data(self):
         initial_dir = 'RPS/' + self.player_data.current_rps_key
         initial_dir += '/Campaigns'
         file_path = filedialog.askopenfilename(
             initialdir=initial_dir, filetypes=[('Campaign Files', '*.cdat')])
-        if file_path:
-            try:
-                with open(file_path, 'rb') as file:
-                    loaded_campaign = pickle.load(file)
-                    self.campaign_data = loaded_campaign
-            except Exception as e:
-                print(f"Error loading campaign: {e}")
+        self.campaign_data = SaveLoad.unpickled_thing(file_path)
+
+    def save_map_data(self, game_map=None):
+        self.get_campaign_folder_path()
+        if game_map:
+            path = (self.campaign_folder_path +
+                    '/maps/' + game_map.name + '.gmap')
+            SaveLoad.pickle_this(game_map, path)
+
+    def load_map_data(self, map_name):
+        self.get_campaign_folder_path()
+        if map_name:
+            path = (self.campaign_folder_path +
+                    '/maps/' + map_name + '.gmap')
+            self.current_map_data = SaveLoad.unpickled_thing(path)
 
     def get_campaign_info_string(self):
         c_info = self.campaign_data.name + '\n'
@@ -73,37 +93,20 @@ class UserBot:
         c_info += self.campaign_data.rp_system + '\n'
         c_info += str(self.campaign_data.fantasy_level) + '\n'
         c_info += str(self.campaign_data.technology_level) + '\n'
+        c_info += self.campaign_data.world_map_key + '\n'
+        c_info += self.campaign_data.current_map_key + '\n'
+        c_info += str(len(self.campaign_data.pc_party)) + '\n'
         return c_info
-
-    def add_campaign_headline(self):
-        self.mother.announcements.receive_messages(
-            new_set=self.campaign_data.headlines)
 
     def get_campaign_maps(self):
         try:
             m_dir = 'RPS/'+self.player_data.current_rps_key
-            m_dir += '/Campaigns/'+self.campaign_data.name+"/"
+            m_dir += '/Campaigns/'+self.campaign_data.name+"/maps/"
             return [f for f in os.listdir(m_dir) if f.endswith('.gmap')]
         except FileNotFoundError:
             print("Directory not found")
-    
-    def get_campaign_filepath(self):
-        rps = self.player_data.current_rps_key
-        c_name = self.campaign_data.name
-        return os.path.join('../../../RPS', rps, "Campaigns", c_name)
 
-    def new_campaign(self, campaign_data=None):
-        if campaign_data:
-            self.campaign_data = campaign_data
-            self.campaign_data.gm = self.player_data.name
-            self.campaign_data.rp_system = self.player_data.current_rps_key
-            save_dir = self.get_campaign_filepath() + self.campaign_data.world_map_key
-            os.makedirs(save_dir)
-            world_map_data = OverworldMapData(
-                name=self.campaign_data.world_map_key,
-                image_path=self.campaign_data.world_map_file_path)
-            save_path = os.path.join(
-                save_dir, self.campaign_data.world_map_key+'.gmap')
-            with open(save_path, 'wb') as file:
-                pickle.dump(world_map_data, file)
-            self.mother.the_view.show_overworld_map(world_map_data)
+    def get_campaign_folder_path(self):
+        self.campaign_folder_path = 'RPS/' + self.campaign_data.rp_system
+        self.campaign_folder_path += '/Campaigns/' + self.campaign_data.name
+

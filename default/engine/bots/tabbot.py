@@ -23,9 +23,6 @@ class GMEditorTabGroup(DynoTab):
         self.add_custom_tab(
             CampaignEditorTab,
             icon_path='default/tabs/img/icons/t_campaign.png')
-        self.add_custom_tab(
-            WorldMapEditorTab,
-            icon_path='default/tabs/img/icons/t_gmap.png')
 
 
 class PCTabGroup(DynoTab):
