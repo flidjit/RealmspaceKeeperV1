@@ -1,15 +1,14 @@
-import base64
-import io
-import os
-import pickle
 import tkinter as tk
 from tkinter import filedialog
-
-from PIL import Image, ImageTk
-
+from PIL import Image
 from MetaNexusv1.default.engine.altvp import AltViewport
-from MetaNexusv1.default.engine.datatypes import ui_clrs, PinMapScale, PinMapData
+from MetaNexusv1.default.engine.datatypes import ui_clrs, PinMapData
 from MetaNexusv1.default.engine.tools import Pencil, SaveLoad
+
+"""
+ToDo:
+    * Grid & Hex Frames.
+"""
 
 
 class PinMapFrame(tk.Canvas):
@@ -208,3 +207,8 @@ class NewMapAltVP(AltViewport):
     def exit_me(self):
         self.destroy()
 
+
+# root = tk.Tk()
+# root.configure(width=900, height=530, bg='black')
+# test = NewMapAltVP(root)
+# root.mainloop()

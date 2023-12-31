@@ -1,9 +1,8 @@
 from tkinter import filedialog
-from default.engine.datatypes import PlayerData, CampaignData, PinMapData
-import os
-from default.engine.tools import SaveLoad
-
+from MetaNexusv1.default.engine.datatypes import PlayerData, CampaignData, PinMapData
+from MetaNexusv1.default.engine.tools import SaveLoad
 from MetaNexusv1.default.engine.datatypes import GameMapData
+import os
 
 
 class UserBot:
@@ -52,6 +51,16 @@ class UserBot:
         except FileNotFoundError:
             self.player_data = PlayerData()
             self.save_player_data()
+
+    def receive_player_data(self, player_data=None,
+                            rps_key=None, game_mode=None):
+        if player_data:
+            self.player_data = player_data
+        if rps_key:
+            self.player_data.current_rps_key = rps_key
+        if game_mode:
+            self.player_data.game_mode = game_mode
+        self.save_player_data()
 
     def new_campaign(self, campaign_data=None):
         if campaign_data:

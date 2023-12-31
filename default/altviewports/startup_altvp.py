@@ -1,16 +1,20 @@
 import tkinter as tk
 from tkinter import ttk
 import os
-from default.engine.altvp import AltViewport
-from default.engine.datatypes import GameMode
-from default.engine.bots.userbot import UserBot
+from MetaNexusv1.default.engine.altvp import AltViewport
+from MetaNexusv1.default.engine.datatypes import GameMode, PlayerData
+
+"""
+ToDo:
+    * Animation.
+    * 
+"""
 
 
 class StartupAltVP(AltViewport):
     def __init__(self, master=None, mother=None, partner=None):
         super().__init__(master, backdrop_image_path="rec/ui/bg1.png")
         self.mother = mother
-        self.partner = partner
         self.colors = self.mother.the_user.player_data.ui_colors
 
         rps_list = tk.StringVar()  # ??
@@ -54,22 +58,25 @@ class StartupAltVP(AltViewport):
         self.new_player_check()
 
     def pc_mode_selected(self):
-        self.mother.the_user.player_data.game_mode = GameMode.PLAYER_
-        self.finish_up()
+        self.finish_up(GameMode.PLAYER_)
 
     def gm_mode_selected(self):
-        self.mother.the_user.player_data.game_mode = GameMode.GM_
-        self.finish_up()
+        self.finish_up(GameMode.GM_)
 
-    def finish_up(self):
-        self.mother.the_user.player_data.current_rps_key = self.rps_combobox.get()
+    def finish_up(self, game_mode):
+        rps = self.rps_combobox.get()
         if self.usr_name:
-            self.mother.the_user.player_data.name = self.usr_name.get()
-            self.mother.the_user.player_data.email = self.usr_email.get()
-            self.mother.the_user.player_data.is_male = self.gender_var.get()
-        self.mother.the_user.save_player_data()
+            nam = self.usr_name.get()
+            eml = self.usr_email.get()
+            gen = self.gender_var.get()
+            player_data = PlayerData(
+                nam, eml, gen, rps, game_mode)
+        else:
+            player_data = None
+        self.mother.the_user.receive_player_data(
+            player_data, rps, game_mode)
         self.mother.the_tabs.change_mode_tabs()
-        self.exit_me()
+        self.destroy()
 
     def new_player_check(self):
 
@@ -107,3 +114,9 @@ class StartupAltVP(AltViewport):
 
     def exit_me(self):
         self.destroy()
+
+
+# root = tk.Tk()
+# root.configure(width=900, height=530, bg='black')
+# test = StartupAltVP(root)
+# root.mainloop()

@@ -1,9 +1,7 @@
 import tkinter as tk
-from tkinter import filedialog
-from default.engine.altvp import ClickAndDragViewport
-from default.engine.datatypes import PinMapPin
-from default.text.macros import default_pin_paths
-
+from MetaNexusv1.default.engine.altvp import ClickAndDragViewport
+from MetaNexusv1.default.engine.datatypes import PinMapPin, ui_clrs
+from MetaNexusv1.default.text.macros import default_pin_paths
 from MetaNexusv1.default.engine.tools import Pencil
 
 """
@@ -15,13 +13,14 @@ ToDo:
 
 
 class PinMapAltVP(ClickAndDragViewport):
-    def __init__(self, master=None, mother=None, partner=None,
+    def __init__(self, master=None, colors=ui_clrs,
+                 campaign_editor_tab=None,
                  backdrop_image_path=None,
-                 overworld_map=None, gm_mode=True, pin_paths=None):
+                 overworld_map=None,
+                 gm_mode=True, pin_paths=None):
         super().__init__(master, backdrop_image_path)
-        self.mother = mother
-        self.partner = partner
-        self.colors = self.mother.the_user.player_data.ui_colors
+        self._campaign_editor_tab = campaign_editor_tab
+        self._colors = colors
         self.overworld_map = overworld_map
         self.gm_mode = gm_mode
         self.scale_object_list = []
@@ -42,8 +41,6 @@ class PinMapAltVP(ClickAndDragViewport):
         self.bind("<ButtonPress-1>", self.on_left_click)
         self.bind('<Control-ButtonPress-1>', self.on_ctrl_left_click)
         self.bind("<ButtonRelease-1>", self.on_left_click_release)
-
-
 
     def on_left_click(self, event):
         if self.responding:
@@ -144,6 +141,12 @@ class PinMapAltVP(ClickAndDragViewport):
             self.overworld_map.map_scale_data, self, 20, 380)
 
     def exit_me(self):
-        self.partner.receive_map(self.overworld_map)
+        self._campaign_editor_tab.receive_map(
+            self.overworld_map)
         self.destroy()
 
+
+# root = tk.Tk()
+# root.configure(width=900, height=530, bg='black')
+# test = PinMapAltVP(root)
+# root.mainloop()

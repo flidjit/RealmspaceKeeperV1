@@ -4,13 +4,13 @@ from enum import Enum
 
 
 class DieRoll:
-    def __init__(self, rolled_by='GM', roll_string='1d20',
-                 faces=20, number=2, bonus=1,
+    def __init__(self, rolled_by='GM',
+                 faces=20, multiplier=2, bonus=1,
                  rolls=None, total=0, roll_me=True):
-        self.roll_string = roll_string
+        self.roll_string = ''
         self.rolled_by = rolled_by
         self.faces = faces
-        self.number = number
+        self.multiplier = multiplier
         self.bonus = bonus
         if rolls:
             self.rolls = rolls
@@ -24,7 +24,7 @@ class DieRoll:
     def roll_me(self):
         self.rolls = []
         self.total = 0
-        for _ in range(self.number):
+        for _ in range(self.multiplier):
             result = random.randint(1, self.faces)
             result += self.bonus
             self.rolls.append(result)
@@ -32,7 +32,7 @@ class DieRoll:
 
     def get_roll_string(self):
         s = self.rolled_by + ' rolled '
-        s += str(self.number) + 'd' + str(self.faces)
+        s += str(self.multiplier) + 'd' + str(self.faces)
         s += '+' + str(self.bonus) + ': '
         if len(self.rolls) > 1:
             s += '( '
@@ -192,15 +192,19 @@ class GameMode(Enum):
 
 
 class PlayerData:
-    def __init__(self):
-        self.name = 'New Player'
-        self.email = ''
-        self.is_male = True
-        self.current_rps_key = 'AOARP'
+    def __init__(
+            self, name='New Player',
+            email='', is_male=True,
+            current_rps_key='AOARP',
+            game_mode=GameMode.STARTUP_):
+        self.name = name
+        self.email = email
+        self.is_male = is_male
+        self.current_rps_key = current_rps_key
         self.current_campaign_key = 'Campaign Name'
         self.current_character_key = 'Somebody'
         self.date_joined = datetime.now().strftime("%Y - %m - %d")
-        self.game_mode = GameMode.STARTUP_
+        self.game_mode = game_mode
         self.cooldown = {}
         self.key_map = {}
         self.key_config = {}

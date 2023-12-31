@@ -1,8 +1,13 @@
 import tkinter as tk
-from tkinter import filedialog
-from MetaNexusv1.default.engine.datatypes import ui_clrs, CampaignData, PinMapData
+from MetaNexusv1.default.engine.datatypes import ui_clrs, CampaignData
 from MetaNexusv1.default.engine.altvp import AltViewport
-from PIL import Image, ImageTk
+
+"""
+ToDo:
+    * User selection target.
+    * Display selected pin title.
+    * Display map name.
+"""
 
 
 class NewCampaignAltVP(AltViewport):

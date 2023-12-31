@@ -1,8 +1,6 @@
 import tkinter as tk
-from default.altviewports.pinmap_altvp import PinMapAltVP
-from default.altviewports.startup_altvp import StartupAltVP
-
-from MetaNexusv1.default.engine.tools import SaveLoad
+from MetaNexusv1.default.altviewports.pinmap_altvp import PinMapAltVP
+from MetaNexusv1.default.altviewports.startup_altvp import StartupAltVP
 
 
 class ViewBot:
@@ -24,7 +22,7 @@ class ViewBot:
         self.cam = None
         self.cursor_3D = None
 
-        self.display_startup_altvp()
+        self.display_startup_altvp(self.mother.the_user)
 
     def display_overworld_altvp(self, overworld_map_data=None,
                                 partner=None):

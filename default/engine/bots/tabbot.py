@@ -1,9 +1,8 @@
-from default.engine.datatypes import GameMode
-from default.engine.dynotab import DynoTab
-from default.tabs.helptab import HelpTab
-from default.tabs.dicetab import DiceTab
-from default.tabs.campaigneditortab import CampaignEditorTab
-from default.tabs.worldmapeditortab import WorldMapEditorTab
+from MetaNexusv1.default.engine.datatypes import GameMode
+from MetaNexusv1.default.engine.dynotab import DynoTab
+from MetaNexusv1.default.tabs.helptab import HelpTab
+from MetaNexusv1.default.tabs.dicetab import DiceTab
+from MetaNexusv1.default.tabs.campaigneditortab import CampaignEditorTab
 
 
 class GMHostTabGroup(DynoTab):
