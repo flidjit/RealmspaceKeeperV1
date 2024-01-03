@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from MetaNexusv1.default.engine.tools import SaveLoad
+from MetaNexusv1.default.engine.tools import DatTool
 
 
 class AltViewport(tk.Canvas):
@@ -56,7 +56,7 @@ class ClickAndDragViewport(AltViewport):
 
     def show_image(self, image_data):
         try:
-            img_ = SaveLoad.data_to_tk(image_data)
+            img_ = DatTool.data_to_tk(image_data)
             self.image_item = self.create_image(
                 self.image_offset[0], self.image_offset[1],
                 anchor=tk.NW, image=img_)

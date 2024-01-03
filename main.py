@@ -7,11 +7,11 @@ from direct.showbase.ShowBase import ShowBase
 from direct.task.TaskManagerGlobal import taskMgr
 
 from default.engine.aoamarquee import AOAMarquee
-from default.engine.bots.viewbot import ViewBot
+from default.engine.bots.tabbot import TabBot
 from default.engine.bots.textbot import TextBot
 from default.engine.bots.userbot import UserBot
-from default.engine.bots.tabbot import TabBot
-from default.engine.tools import get_basic_style
+from default.engine.bots.viewbot import ViewBot
+import default.engine.tools as tlz
 
 
 class Mother(ShowBase):
@@ -39,7 +39,7 @@ class Mother(ShowBase):
 
         self.load_rpsystem()
         self.initialize_the_view()
-        self.ttk_style = get_basic_style(
+        self.ttk_style = tlz.get_basic_style(
             self.the_user.player_data.ui_colors)
 
         self.bg_image_path = 'rec/ui/uibg.png'

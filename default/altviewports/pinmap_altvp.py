@@ -2,7 +2,7 @@ import tkinter as tk
 from MetaNexusv1.default.engine.altvp import ClickAndDragViewport
 from MetaNexusv1.default.engine.datatypes import PinMapPin, ui_clrs
 from MetaNexusv1.default.text.macros import default_pin_paths
-from MetaNexusv1.default.engine.tools import Pencil
+from MetaNexusv1.default.engine.tools import AltVPTool
 
 """
 ToDo:
@@ -137,7 +137,7 @@ class PinMapAltVP(ClickAndDragViewport):
     def draw_map_scale(self):
         for o in self.scale_object_list:
             self.delete(o)
-        self.scale_object_list = Pencil.a_map_scale_object_list(
+        self.scale_object_list = AltVPTool.a_map_scale_object_list(
             self.overworld_map.map_scale_data, self, 20, 380)
 
     def exit_me(self):

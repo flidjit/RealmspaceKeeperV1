@@ -3,13 +3,108 @@ import io
 import os
 import platform
 import sys
+import tkinter as tk
 from tkinter import ttk
-from MetaNexusv1.default.engine.datatypes import ui_clrs
+import MetaNexusv1.default.engine.datatypes as dt
 import pickle
 from PIL import Image, ImageTk
 
 
-def get_basic_style(gui_colors=ui_clrs):
+class TkTool:
+    @staticmethod
+    def set_colors(ui_colors=dt.ui_clrs):
+        style = ttk.Style()
+        style.theme_use('alt')
+
+        style.map(
+            'TNotebook.Tab',
+            background=[('selected', ui_colors['Bright #2'])])
+        style.configure(
+            'TNotebook.Tab',
+            padding=(0, 0),
+            borderwidth=0,
+            highlightthickness=0,
+            background=ui_colors['BG #1'],
+            foreground=ui_colors['Normal #2'])
+        style.configure(
+            'TNotebook',
+            padding=(0, 0),
+            borderwidth=0,
+            highlightthickness=0,
+            background=ui_colors['BG #3'])
+        style.configure(
+            "TScrollbar",
+            padding=(0, 0),
+            borderwidth=0,
+            highlightthickness=0,
+            background=ui_colors['BG #1'],
+            troughcolor=ui_colors['BG #3'],
+            slidercolor=ui_colors['Normal #1'],
+            arrowcolor=ui_colors['Normal #4'],
+            arrowsize=15,
+            sliderthickness=8)
+        style.configure(
+            'Treeview.Heading',
+            padding=(0, 0),
+            borderwidth=0,
+            highlightthickness=0,
+            background=ui_colors['BG #4'],
+            foreground=ui_colors['Normal #4'])
+        style.configure(
+            'Treeview',
+            padding=(0, 0),
+            borderwidth=0,
+            highlightthickness=0,
+            fieldbackground=ui_colors['BG #3'],
+            foreground=ui_colors['Normal #3'])
+        style.configure(
+            "TCombobox",
+            padding=(0, 0),
+            borderwidth=0,
+            highlightthickness=0,
+            background=ui_colors['BG #1'],
+            selectbackground=ui_colors['BG #4'],
+            foreground=ui_colors['Normal #2'],
+            selectforeground=ui_colors['Normal #1'],
+            arrowsize=15,
+            arrowcolor=ui_colors['Bright #3'],
+            font=("Arial", 12))
+        style.configure(
+            "TEntry",
+            fieldbackground=ui_colors['BG #1'])
+        return style
+
+    @staticmethod
+    def add_widgets(window, ui_colors, button_w=None,
+                    label_w=None, entry_w=None, text_w=None, list_w=None):
+
+        if button_w:
+            for btn in button_w:
+                window.button_w[btn[0]] = tk.Button(
+                    window, highlightthickness=0, borderwidth=0,
+                    bg=ui_colors[btn[1]], fg=ui_colors[btn[2]],
+                    text=btn[3], command=btn[4])
+                window.button_w[btn[0]].place(
+                    x=btn[5], y=btn[6], width=btn[7], height=btn[8])
+
+        if label_w:
+            for lbl in label_w:
+                window.label_w[lbl[0]] = tk.Label(
+                    window, bg=ui_colors[lbl[1]],
+                    fg=ui_colors[lbl[2]],
+                    font=lbl[3], justify=lbl[4],text=lbl[5])
+                window.label_w[lbl[0]].place(x=lbl[6], y=lbl[7])
+
+        if list_w:
+            for lst in list_w:
+                window.listbox_w = tk.Listbox(
+                    window, highlightthickness=0, borderwidth=0,
+                    bg=ui_colors['BG #4'],
+                    fg=ui_colors['Bright #1'])
+                window.listbox_w.place(x=10, y=300, height=198, width=400)
+
+
+def get_basic_style(gui_colors=dt.ui_clrs):
     style = ttk.Style()
     style.theme_use('alt')
 
@@ -72,7 +167,7 @@ def get_basic_style(gui_colors=ui_clrs):
     return style
 
 
-class SaveLoad:
+class DatTool:
     @staticmethod
     def pickle_this(thing, path):
         if thing and path:
@@ -120,7 +215,7 @@ class SaveLoad:
         return ImageTk.PhotoImage(image)
 
 
-class Pencil:
+class AltVPTool:
     @staticmethod
     def a_map_scale_object_list(map_scale_data, canvas, screen_x=0, screen_y=0):
         scale_group = []
@@ -159,7 +254,7 @@ class Pencil:
         return thumbnail
 
 
-class ModelHandler:
+class ModelTool:
     @staticmethod
     def load_3d_map(map_data=None):
         if map_data:
@@ -187,7 +282,7 @@ class ModelHandler:
                 print("swap this model's texture and return")
 
 
-class LocalTileHandler:
+class GridMapTool:
     @staticmethod
     def get_tile_by_position(position=None):
         if position:

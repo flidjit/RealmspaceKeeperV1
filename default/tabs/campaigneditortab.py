@@ -1,8 +1,7 @@
 import tkinter as tk
 import os
-from MetaNexusv1.default.altviewports.newcampaign_altvp import NewCampaignAltVP
-from MetaNexusv1.default.altviewports.pinmap_altvp import PinMapAltVP
-from MetaNexusv1.default.altviewports.newmap_altvp import NewMapAltVP
+import MetaNexusv1.default.altviewports as avps
+from MetaNexusv1.default.engine import tools
 
 
 class CampaignEditorTab(tk.Frame):
@@ -21,8 +20,8 @@ class CampaignEditorTab(tk.Frame):
         self._colors = self._user.player_data.ui_colors
         self.configure(bg=self._colors['BG #3'])
 
-        self.buttons_w = {}
-        self.labels_w = {}
+        self.button_w = {}
+        self.label_w = {}
         self.listbox_w = None
         self.build_me()
 
@@ -32,7 +31,7 @@ class CampaignEditorTab(tk.Frame):
         self.display_campaign_info()
 
     def build_me(self):
-        d_buttons = [
+        d_button = [
             ['Load Campaign Button', 'Bright #2', 'BG #2',
              'Load', self.load_campaign_btn_click,
              220, 40, 50, 25],
@@ -57,58 +56,48 @@ class CampaignEditorTab(tk.Frame):
              'Delete', self.delete_map_btn_click,
              250, 500, 80, 30]]
 
-        for b in d_buttons:
-            self.buttons_w[b[0]] = tk.Button(
-                self, highlightthickness=0, borderwidth=0,
-                bg=self._colors[b[1]], fg=self._colors[b[2]],
-                text=b[3], command=b[4])
-            self.buttons_w[b[0]].place(
-                x=b[5],  y=b[6], width=b[7], height=b[8])
-
-        d_labels = [
+        d_label = [
             ['Title Label', 'BG #3', 'Dim #3',
-             ('courier', 18, 'bold'), 'Campaign Editor', 30, 10],
+             ('courier', 18, 'bold'), tk.LEFT,
+             'Campaign Editor', 30, 10],
 
             ['Fields Label', 'BG #3', 'Dim #3',
-             ('Times New Roman', 12), ' ', 10, 100],
+             ('Times New Roman', 12), tk.RIGHT,
+             ' ', 10, 100],
 
             ['Info Label', 'BG #3', 'Bright #1',
-             ('Times New Roman', 12), 'Campaign Editor', 170, 100]]
-        for l in d_labels:
-            self.labels_w[l[0]] = tk.Label(
-                self, bg=self._colors[l[1]],
-                fg=self._colors[l[2]],
-                font=l[3], text=l[4])
-            self.labels_w[l[0]].place(x=l[5], y=l[6])
+             ('Times New Roman', 12), tk.LEFT,
+             'Campaign Editor', 170, 100]]
 
-        self.labels_w['Title Label'].config(justify=tk.LEFT)
-        self.labels_w['Fields Label'].config(justify=tk.RIGHT)
-        self.labels_w['Info Label'].config(justify=tk.LEFT)
+        d_list = [
+            ['Map List', 'BG#4', 'Bright #1',
+             ('Times New Roman', 12), 198, 400]]
 
-        self.listbox_w = tk.Listbox(
-            self, highlightthickness=0, borderwidth=0,
-            bg=self._colors['BG #4'],
-            fg=self._colors['Bright #1'])
-        self.listbox_w.place(x=10, y=300, height=198, width=400)
+        tools.TkTool.add_widgets(
+            self, self._colors, button_w=d_button, label_w=d_label, list_w=d_list)
+
+        self.label_w['Title Label'].config(justify=tk.LEFT)
+        self.label_w['Fields Label'].config(justify=tk.RIGHT)
+        self.label_w['Info Label'].config(justify=tk.LEFT)
 
     def disable_me(self):
-        for s in self.buttons_w:
-            self.buttons_w[s].config(state='disabled')
+        for s in self.button_w:
+            self.button_w[s].config(state='disabled')
 
     def enable_me(self):
-        for s in self.buttons_w:
-            self.buttons_w[s].config(state='normal')
+        for s in self.button_w:
+            self.button_w[s].config(state='normal')
         self.display_campaign_info()
 
     def display_campaign_info(self):
         self.info_str = self._user.get_campaign_info_string()
-        self.labels_w["Info Label"].config(text=self.info_str)
+        self.label_w["Info Label"].config(text=self.info_str)
 
     def display_campaign_fields(self):
         self.field_str = 'Campaign Name:\nGM:\nRPG System:\nTechnology Level:\n'
         self.field_str += 'Fantasy Level:\nWorld Map:\nCurrent Map:\n'
         self.field_str += '# of players:\nDescription Headline:\n'
-        self.labels_w['Fields Label'].config(text=self.field_str)
+        self.label_w['Fields Label'].config(text=self.field_str)
 
     def save_campaign_btn_click(self):
         self._user.save_campaign_data()
@@ -120,12 +109,12 @@ class CampaignEditorTab(tk.Frame):
         self.display_campaign_info()
 
     def new_campaign_btn_click(self):
-        self._view.alt_viewport = NewCampaignAltVP(
+        self._view.alt_viewport = avps.newcampaign_altvp.NewCampaignAltVP(
             self._mother.root, self._mother, self)
         self._tabs.disable_tabs()
 
     def new_map_btn_click(self):
-        self._view.alt_viewport = NewMapAltVP(
+        self._view.alt_viewport = avps.newmap_altvp.NewMapAltVP(
             self._mother.root, self._mother, self)
         self._tabs.disable_tabs()
 
@@ -138,7 +127,7 @@ class CampaignEditorTab(tk.Frame):
             self._user.load_map_data(selected_item)
             self._user.campaign_data.current_map_key = selected_item
             self.display_campaign_info()
-            self._view.alt_viewport = PinMapAltVP(
+            self._view.alt_viewport = avps.pinmap_altvp.PinMapAltVP(
                 master=self._mother.root, colors=self._colors,
                 campaign_editor_tab=self,
                 overworld_map=self._user.current_map_data)

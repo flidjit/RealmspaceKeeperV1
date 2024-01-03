@@ -1,6 +1,6 @@
 import tkinter as tk
-from MetaNexusv1.default.altviewports.pinmap_altvp import PinMapAltVP
-from MetaNexusv1.default.altviewports.startup_altvp import StartupAltVP
+import MetaNexusv1.default.altviewports.pinmap_altvp as pvp
+import MetaNexusv1.default.altviewports.startup_altvp as svp
 
 
 class ViewBot:
@@ -27,14 +27,12 @@ class ViewBot:
     def display_overworld_altvp(self, overworld_map_data=None,
                                 partner=None):
         if overworld_map_data:
-            self.alt_viewport = PinMapAltVP(
+            self.alt_viewport = pvp.PinMapAltVP(
                 master=self.mother.root,
-                mother=self.mother,
-                overworld_map=overworld_map_data,
-                partner=partner)
+                overworld_map=overworld_map_data)
 
     def display_startup_altvp(self, partner=None):
-        self.alt_viewport = StartupAltVP(
+        self.alt_viewport = svp.StartupAltVP(
             master=self.mother.mother_frame,
             mother=self.mother, partner=partner)
 

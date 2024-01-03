@@ -1,6 +1,6 @@
 import tkinter as tk
-from MetaNexusv1.default.engine.datatypes import ui_clrs, CampaignData
-from MetaNexusv1.default.engine.altvp import AltViewport
+import MetaNexusv1.default.engine.datatypes as dt
+import MetaNexusv1.default.engine.altvp as avp
 
 """
 ToDo:
@@ -10,7 +10,7 @@ ToDo:
 """
 
 
-class NewCampaignAltVP(AltViewport):
+class NewCampaignAltVP(avp.AltViewport):
     def __init__(self, master=None, mother=None, partner=None):
         super().__init__(master)
         self.mother = mother
@@ -18,7 +18,7 @@ class NewCampaignAltVP(AltViewport):
         if mother:
             self.colors = self.mother.the_user.player_data.ui_colors
         else:
-            self.colors = ui_clrs
+            self.colors = dt.ui_clrs
         self.configure(bg=self.colors['BG #4'])
 
         self.campaign_name_label = tk.Label(
@@ -88,7 +88,7 @@ class NewCampaignAltVP(AltViewport):
         tl = self.technology_level_scale.get()
         fl = self.fantasy_level_scale.get()
         ds = self.campaign_description_text.get("1.0", tk.END)
-        cp = CampaignData(
+        cp = dt.CampaignData(
             name=cn, description=ds,
             technology_level=tl, fantasy_level=fl)
         self.mother.the_user.new_campaign(campaign_data=cp)

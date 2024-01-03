@@ -45,6 +45,33 @@ class DieRoll:
         print(s)
 
 
+dice_types = {
+    'd20': {
+        'Faces': 20, 'Placement': [344, 76], 'Selected': False,
+        'Image Path': 'default/tabs/img/dicetab/d20.png',
+        'Image': None},
+    'd12': {
+        'Faces': 12, 'Placement': [281, 76], 'Selected': False,
+        'Image Path': 'default/tabs/img/dicetab/d12.png',
+        'Image': None},
+    'd10': {
+        'Faces': 10, 'Placement': [218, 76], 'Selected': False,
+        'Image Path': 'default/tabs/img/dicetab/d10.png',
+        'Image': None},
+    'd8': {
+        'Faces': 8, 'Placement': [155, 76], 'Selected': False,
+        'Image Path': 'default/tabs/img/dicetab/d8.png',
+        'Image': None},
+    'd6': {
+        'Faces': 6, 'Placement': [92, 76], 'Selected': False,
+        'Image Path': 'default/tabs/img/dicetab/d6.png',
+        'Image': None},
+    'd4': {
+        'Faces': 4, 'Placement': [29, 76], 'Selected': False,
+        'Image Path': 'default/tabs/img/dicetab/d4.png',
+        'Image': None}}
+
+
 class ModelData:
     def __init__(self, model_path, render, x, y,
                  occupant=None, walkable=False, flags=None):

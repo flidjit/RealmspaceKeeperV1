@@ -1,7 +1,5 @@
 import tkinter as tk
-
-import pygame
-from default.tools import serialized_image
+import MetaNexusv1.default.engine.tools as tlz
 # Not implemented !
 # Not functional !
 
@@ -15,7 +13,7 @@ class SpriteSheet:
         self.image_data = image_data
         if image_path:
             try:
-                self.image_data = serialized_image(image_path)
+                self.image_data = tlz.DatTool.serialized_image(image_path)
             except Exception as e:
                 print('Exception:' + str(e))
                 print('failed to get image data.')

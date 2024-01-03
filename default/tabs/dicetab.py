@@ -1,31 +1,5 @@
 import tkinter as tk
-from MetaNexusv1.default.engine.datatypes import DieRoll, ui_clrs
-
-dice_types = {
-    'd20': {
-        'Faces': 20, 'Placement': [344, 76], 'Selected': False,
-        'Image Path': 'default/tabs/img/dicetab/d20.png',
-        'Image': None},
-    'd12': {
-        'Faces': 12, 'Placement': [281, 76], 'Selected': False,
-        'Image Path': 'default/tabs/img/dicetab/d12.png',
-        'Image': None},
-    'd10': {
-        'Faces': 10, 'Placement': [218, 76], 'Selected': False,
-        'Image Path': 'default/tabs/img/dicetab/d10.png',
-        'Image': None},
-    'd8': {
-        'Faces': 8, 'Placement': [155, 76], 'Selected': False,
-        'Image Path': 'default/tabs/img/dicetab/d8.png',
-        'Image': None},
-    'd6': {
-        'Faces': 6, 'Placement': [92, 76], 'Selected': False,
-        'Image Path': 'default/tabs/img/dicetab/d6.png',
-        'Image': None},
-    'd4': {
-        'Faces': 4, 'Placement': [29, 76], 'Selected': False,
-        'Image Path': 'default/tabs/img/dicetab/d4.png',
-        'Image': None}}
+import MetaNexusv1.default.engine.datatypes as dt
 
 
 class DiceTab(tk.Canvas):
@@ -54,7 +28,7 @@ class DiceTab(tk.Canvas):
             7, 47, anchor=tk.NW,
             image=self.backdrop_image)
 
-        self.dice_types = dice_types
+        self.dice_types = dt.dice_types
         self.selected_key = 'd4'
         self.selected_multiplier = 1
         self.selected_bonus = 0
@@ -118,13 +92,12 @@ class DiceTab(tk.Canvas):
         f = int(self.selected_key.strip('d'))
         m = self.selected_multiplier
         b = self.selected_bonus
-        roll = DieRoll(rolled_by=self._user_name, faces=f, multiplier=m, bonus=b)
+        roll = dt.DieRoll(rolled_by=self._user_name, faces=f, multiplier=m, bonus=b)
         self._chat.cc_roll(die_roll=roll)
         self.selected_multiplier = 1
         self.selected_bonus = 0
         self.get_chat_string()
 
-#
 # root = tk.Tk()
 # root.configure(width=900, height=530, bg='black')
 # test = DiceTab(root)

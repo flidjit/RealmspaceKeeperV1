@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from default.text.macros import help_data
+import MetaNexusv1.default.text.macros as macro
 
 
 class HelpTab(tk.Frame):
@@ -32,15 +32,15 @@ class HelpTab(tk.Frame):
         self.treeview_scrollbar.place(x=410, y=50, height=155)
 
         current_node = ""
-        for topic in help_data.keys():
+        for topic in macro.help_data.keys():
             if topic.startswith(" - "):
                 self.help_treeview.insert(
                     current_node, "end", text=topic.lstrip(" - "),
-                    values=(help_data[topic],), tags="item_tag")
+                    values=(macro.help_data[topic],), tags="item_tag")
             else:
                 current_node = self.help_treeview.insert(
                     "", "end", text=topic,
-                    values=(help_data[topic],), tags="item_tag")
+                    values=(macro.help_data[topic],), tags="item_tag")
 
         self.help_treeview.bind("<ButtonRelease-1>", self.display_selection)
 

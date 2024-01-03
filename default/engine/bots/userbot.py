@@ -1,6 +1,6 @@
 from tkinter import filedialog
 from MetaNexusv1.default.engine.datatypes import PlayerData, CampaignData, PinMapData
-from MetaNexusv1.default.engine.tools import SaveLoad
+from MetaNexusv1.default.engine.tools import DatTool
 from MetaNexusv1.default.engine.datatypes import GameMapData
 import os
 
@@ -42,11 +42,11 @@ class UserBot:
         self.player_data.key_map[control_name] = control_state
 
     def save_player_data(self):
-        SaveLoad.pickle_this(self.player_data, 'usr/player_config.pcfg')
+        DatTool.pickle_this(self.player_data, 'usr/player_config.pcfg')
 
     def load_player_data(self):
         try:
-            self.player_data = SaveLoad.unpickled_thing('usr/player_config.pcfg')
+            self.player_data = DatTool.unpickled_thing('usr/player_config.pcfg')
             print("Returning player: " + self.player_data.name)
         except FileNotFoundError:
             self.player_data = PlayerData()
@@ -73,14 +73,14 @@ class UserBot:
         if not os.path.exists(self.campaign_folder_path):
             os.makedirs(self.campaign_folder_path)
         path = self.campaign_folder_path + '.cdat'
-        SaveLoad.pickle_this(self.campaign_data, path)
+        DatTool.pickle_this(self.campaign_data, path)
 
     def load_campaign_data(self):
         initial_dir = 'RPS/' + self.player_data.current_rps_key
         initial_dir += '/Campaigns'
         file_path = filedialog.askopenfilename(
             initialdir=initial_dir, filetypes=[('Campaign Files', '*.cdat')])
-        self.campaign_data = SaveLoad.unpickled_thing(file_path)
+        self.campaign_data = DatTool.unpickled_thing(file_path)
 
     def save_map_data(self):
         self.get_campaign_folder_path()
@@ -88,14 +88,14 @@ class UserBot:
         if m:
             path = (self.campaign_folder_path +
                     '/maps/' + m.name + '.gmap')
-            SaveLoad.pickle_this(m, path)
+            DatTool.pickle_this(m, path)
 
     def load_map_data(self, map_name):
         self.get_campaign_folder_path()
         if map_name:
             path = (self.campaign_folder_path +
                     '/maps/' + map_name + '.gmap')
-            self.current_map_data = SaveLoad.unpickled_thing(path)
+            self.current_map_data = DatTool.unpickled_thing(path)
 
     def get_campaign_info_string(self):
         c_info = self.campaign_data.name + '\n'

@@ -1,8 +1,11 @@
-from MetaNexusv1.default.engine.datatypes import GameMode
+import MetaNexusv1.default.engine.datatypes as dt
 from MetaNexusv1.default.engine.dynotab import DynoTab
-from MetaNexusv1.default.tabs.helptab import HelpTab
-from MetaNexusv1.default.tabs.dicetab import DiceTab
-from MetaNexusv1.default.tabs.campaigneditortab import CampaignEditorTab
+import MetaNexusv1.default.tabs as tab
+import MetaNexusv1.default.tabs.campaigneditortab as cpt
+import MetaNexusv1.default.tabs.pinmapeditortab as ppt
+import MetaNexusv1.default.tabs.dicetab as dpt
+import MetaNexusv1.default.tabs.helptab as hpt
+import MetaNexusv1.default.tabs.minimaptab as mpt
 
 
 class GMHostTabGroup(DynoTab):
@@ -20,7 +23,7 @@ class GMEditorTabGroup(DynoTab):
         super().__init__(notebook, *args, **kwargs)
         self.mother = mother
         self.add_custom_tab(
-            CampaignEditorTab,
+            cpt.CampaignEditorTab,
             icon_path='default/tabs/img/icons/t_campaign.png')
 
 
@@ -43,7 +46,7 @@ class TabBot:
             self.mother.mother_frame, mother=mother)
         self.root_tab_group.place(
             x=831, y=55, width=434, height=710)
-        self.mother.the_user.player_data.game_mode = GameMode.STARTUP_
+        self.mother.the_user.player_data.game_mode = dt.GameMode.STARTUP_
         self.change_mode_tabs()
 
     def disable_tabs(self):
@@ -54,18 +57,18 @@ class TabBot:
 
     def change_mode_tabs(self):
         mode = self.mother.the_user.player_data.game_mode
-        if mode == GameMode.STARTUP_:
+        if mode == dt.GameMode.STARTUP_:
             self.set_startup_mode_tabs()
-        elif mode == GameMode.PLAYER_:
+        elif mode == dt.GameMode.PLAYER_:
             self.set_player_mode_tabs()
-        elif mode == GameMode.GM_:
+        elif mode == dt.GameMode.GM_:
             self.set_gm_mode_tabs()
 
     def set_startup_mode_tabs(self):
         self.root_tab_group.add_custom_tab(
-            DiceTab, icon_path='default/tabs/img/icons/t_dice.png')
+            tab.dicetab.DiceTab, icon_path='default/tabs/img/icons/t_dice.png')
         self.root_tab_group.add_custom_tab(
-            HelpTab, icon_path="default/tabs/img/icons/t_help.png")
+            tab.helptab.HelpTab, icon_path="default/tabs/img/icons/t_help.png")
 
     def set_player_mode_tabs(self):
         if self.root_tab_group.get_tab('Editor'):

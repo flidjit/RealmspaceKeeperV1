@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import filedialog
 from PIL import Image
-from MetaNexusv1.default.engine.altvp import AltViewport
-from MetaNexusv1.default.engine.datatypes import ui_clrs, PinMapData
-from MetaNexusv1.default.engine.tools import Pencil, SaveLoad
+import MetaNexusv1.default.engine.altvp as avp
+import MetaNexusv1.default.engine.datatypes as dt
+import MetaNexusv1.default.engine.tools as tlz
 
 """
 ToDo:
@@ -16,11 +16,11 @@ class PinMapFrame(tk.Canvas):
         super().__init__(master, width=560, height=380)
         self.mother = mother
         self.partner = partner
-        self.working_map = PinMapData()
+        self.working_map = dt.PinMapData()
         if mother:
             self.colors = self.mother.the_user.player_data.ui_colors
         else:
-            self.colors = ui_clrs
+            self.colors = dt.ui_clrs
         self.configure(bg=self.colors['BG #4'],
                        borderwidth=0,
                        highlightthickness=0)
@@ -63,16 +63,16 @@ class PinMapFrame(tk.Canvas):
     def prep_image(self, path):
         try:
             self.big_map_image = Image.open(path)
-            self.big_map_data = SaveLoad.image_to_data(
+            self.big_map_data = tlz.DatTool.image_to_data(
                 self.big_map_image)
             self.working_map.map_image_data = self.big_map_data
-            self.big_map_tk = SaveLoad.data_to_tk(
+            self.big_map_tk = tlz.DatTool.data_to_tk(
                 self.big_map_data)
             self.make_map_thumbnail()
-            self.small_map_data = SaveLoad.image_to_data(
+            self.small_map_data = tlz.DatTool.image_to_data(
                 self.small_map_image)
             self.working_map.thumbnail_image_data = self.small_map_data
-            self.small_map_tk = SaveLoad.data_to_tk(
+            self.small_map_tk = tlz.DatTool.data_to_tk(
                 self.small_map_data)
         except Exception as e:
             print(f"Error converting image to data: {e}")
@@ -108,13 +108,13 @@ class PinMapFrame(tk.Canvas):
         self.scale_range_slider.place(x=170, y=350, width=100, height=20)
 
     def make_map_thumbnail(self):
-        self.small_map_image = Pencil.a_thumbnail_image(
+        self.small_map_image = tlz.AltVPTool.a_thumbnail_image(
             self.big_map_image)
 
     def draw_map_scale(self):
         for o in self.scale_object_list:
             self.map_canvas.delete(o)
-        self.scale_object_list = Pencil.a_map_scale_object_list(
+        self.scale_object_list = tlz.AltVPTool.a_map_scale_object_list(
             self.working_map.map_scale_data,
             self.map_canvas, 20, 280)
 
@@ -137,7 +137,7 @@ class PinMapFrame(tk.Canvas):
         self.draw_map_scale()
 
 
-class NewMapAltVP(AltViewport):
+class NewMapAltVP(avp.AltViewport):
     def __init__(self, master=None, mother=None, partner=None):
         super().__init__(master)
         self.mother = mother
@@ -145,7 +145,7 @@ class NewMapAltVP(AltViewport):
         if mother:
             self.colors = self.mother.the_user.player_data.ui_colors
         else:
-            self.colors = ui_clrs
+            self.colors = dt.ui_clrs
         self.configure(bg=self.colors['BG #3'])
         self.title_label = tk.Label(
             self, text='New Map', font=('courier', 20, 'bold'),

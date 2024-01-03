@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 import os
-from MetaNexusv1.default.engine.altvp import AltViewport
-from MetaNexusv1.default.engine.datatypes import GameMode, PlayerData
+import MetaNexusv1.default.engine.altvp as avp
+import MetaNexusv1.default.engine.datatypes as dt
 
 """
 ToDo:
@@ -11,7 +11,7 @@ ToDo:
 """
 
 
-class StartupAltVP(AltViewport):
+class StartupAltVP(avp.AltViewport):
     def __init__(self, master=None, mother=None, partner=None):
         super().__init__(master, backdrop_image_path="rec/ui/bg1.png")
         self.mother = mother
@@ -58,10 +58,10 @@ class StartupAltVP(AltViewport):
         self.new_player_check()
 
     def pc_mode_selected(self):
-        self.finish_up(GameMode.PLAYER_)
+        self.finish_up(dt.GameMode.PLAYER_)
 
     def gm_mode_selected(self):
-        self.finish_up(GameMode.GM_)
+        self.finish_up(dt.GameMode.GM_)
 
     def finish_up(self, game_mode):
         rps = self.rps_combobox.get()
@@ -69,7 +69,7 @@ class StartupAltVP(AltViewport):
             nam = self.usr_name.get()
             eml = self.usr_email.get()
             gen = self.gender_var.get()
-            player_data = PlayerData(
+            player_data = dt.PlayerData(
                 nam, eml, gen, rps, game_mode)
         else:
             player_data = None
