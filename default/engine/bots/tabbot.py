@@ -1,6 +1,5 @@
 import MetaNexusv1.default.engine.datatypes as dt
 from MetaNexusv1.default.engine.dynotab import DynoTab
-import MetaNexusv1.default.tabs as tab
 import MetaNexusv1.default.tabs.campaigneditortab as cpt
 import MetaNexusv1.default.tabs.pinmapeditortab as ppt
 import MetaNexusv1.default.tabs.dicetab as dpt
@@ -25,6 +24,9 @@ class GMEditorTabGroup(DynoTab):
         self.add_custom_tab(
             cpt.CampaignEditorTab,
             icon_path='default/tabs/img/icons/t_campaign.png')
+        self.add_custom_tab(
+            ppt.PinMapEditorTab,
+            icon_path='default/tabs/img/icons/worldtabicon.png')
 
 
 class PCTabGroup(DynoTab):
@@ -66,9 +68,9 @@ class TabBot:
 
     def set_startup_mode_tabs(self):
         self.root_tab_group.add_custom_tab(
-            tab.dicetab.DiceTab, icon_path='default/tabs/img/icons/t_dice.png')
+            dpt.DiceTab, icon_path='default/tabs/img/icons/t_dice.png')
         self.root_tab_group.add_custom_tab(
-            tab.helptab.HelpTab, icon_path="default/tabs/img/icons/t_help.png")
+            hpt.HelpTab, icon_path="default/tabs/img/icons/t_help.png")
 
     def set_player_mode_tabs(self):
         if self.root_tab_group.get_tab('Editor'):

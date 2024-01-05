@@ -280,3 +280,12 @@ class CampaignData:
         self.irl_start_date = datetime.now().strftime("%Y - %m - %d")
         self.pc_party = {}
 
+
+class GameUI:
+    # not implemented
+    def __init__(self):
+        self.name = 'UI name'
+        self.backdrops = {}
+        self.icons = {}
+        self.colors = {}
+        self.fonts = {}

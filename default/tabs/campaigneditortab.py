@@ -6,6 +6,10 @@ from MetaNexusv1.default.engine import tools
 
 class CampaignEditorTab(tk.Frame):
     NAME = 'Campaign'
+    """ PinMapEditor Portfolio:
+            Allows user to load and edit campaigns, and their 
+            associated maps. Serves as central hub for all other 'editor' 
+            tabs, which allow user in GM mode to create their world."""
 
     def __init__(self, notebook, mother=None,
                  *args, **kwargs):
@@ -22,7 +26,7 @@ class CampaignEditorTab(tk.Frame):
 
         self.button_w = {}
         self.label_w = {}
-        self.listbox_w = None
+        self.list_w = {}
         self.build_me()
 
         self.info_str = ''
@@ -55,7 +59,6 @@ class CampaignEditorTab(tk.Frame):
             ['Delete Map Button', 'Bright #3', 'BG #1',
              'Delete', self.delete_map_btn_click,
              250, 500, 80, 30]]
-
         d_label = [
             ['Title Label', 'BG #3', 'Dim #3',
              ('courier', 18, 'bold'), tk.LEFT,
@@ -68,17 +71,11 @@ class CampaignEditorTab(tk.Frame):
             ['Info Label', 'BG #3', 'Bright #1',
              ('Times New Roman', 12), tk.LEFT,
              'Campaign Editor', 170, 100]]
-
         d_list = [
-            ['Map List', 'BG#4', 'Bright #1',
-             ('Times New Roman', 12), 198, 400]]
-
+            ['Map List', 'BG #4', 'Bright #1',
+             ('Times New Roman', 12), 10, 300, 198, 400]]
         tools.TkTool.add_widgets(
             self, self._colors, button_w=d_button, label_w=d_label, list_w=d_list)
-
-        self.label_w['Title Label'].config(justify=tk.LEFT)
-        self.label_w['Fields Label'].config(justify=tk.RIGHT)
-        self.label_w['Info Label'].config(justify=tk.LEFT)
 
     def disable_me(self):
         for s in self.button_w:
@@ -119,11 +116,11 @@ class CampaignEditorTab(tk.Frame):
         self._tabs.disable_tabs()
 
     def load_map_btn_click(self):
-        if self.listbox_w.curselection():
+        if self.list_w['Map List'].curselection():
             if self._view.alt_viewport:
                 self._view.alt_viewport.exit_me()
-            selected_index = self.listbox_w.curselection()[0]
-            selected_item = self.listbox_w.get(selected_index)
+            selected_index = self.list_w['Map List'].curselection()
+            selected_item = self.list_w['Map List'].get(selected_index)
             self._user.load_map_data(selected_item)
             self._user.campaign_data.current_map_key = selected_item
             self.display_campaign_info()
@@ -137,13 +134,13 @@ class CampaignEditorTab(tk.Frame):
         print('delete selected map.')
 
     def populate_location_list(self):
-        self.listbox_w.delete(0, tk.END)
+        self.list_w['Map List'].delete(0, tk.END)
         locations = self._user.get_campaign_maps()
         if locations:
             for map_ in locations:
                 key_name, extension = os.path.splitext(map_)
-                self.listbox_w.insert(tk.END, key_name)
-                self.listbox_w.update()
+                self.list_w['Map List'].insert(tk.END, key_name)
+                self.list_w['Map List'].update()
 
     def pin_map_selected(self, pin_map_data=None):
         # called by 'load_map' if the map type is 'Overworld'.

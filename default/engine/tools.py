@@ -97,74 +97,13 @@ class TkTool:
 
         if list_w:
             for lst in list_w:
-                window.listbox_w = tk.Listbox(
+                window.list_w[lst[0]] = tk.Listbox(
                     window, highlightthickness=0, borderwidth=0,
-                    bg=ui_colors['BG #4'],
-                    fg=ui_colors['Bright #1'])
-                window.listbox_w.place(x=10, y=300, height=198, width=400)
-
-
-def get_basic_style(gui_colors=dt.ui_clrs):
-    style = ttk.Style()
-    style.theme_use('alt')
-
-    style.map(
-        'TNotebook.Tab',
-        background=[('selected', gui_colors['Bright #2'])])
-    style.configure(
-        'TNotebook.Tab',
-        padding=(0, 0),
-        borderwidth=0,
-        highlightthickness=0,
-        background=gui_colors['BG #1'],
-        foreground=gui_colors['Normal #2'])
-    style.configure(
-        'TNotebook',
-        padding=(0, 0),
-        borderwidth=0,
-        highlightthickness=0,
-        background=gui_colors['BG #3'])
-    style.configure(
-        "TScrollbar",
-        padding=(0, 0),
-        borderwidth=0,
-        highlightthickness=0,
-        background=gui_colors['BG #1'],
-        troughcolor=gui_colors['BG #3'],
-        slidercolor=gui_colors['Normal #1'],
-        arrowcolor=gui_colors['Normal #4'],
-        arrowsize=15,
-        sliderthickness=8)
-    style.configure(
-        'Treeview.Heading',
-        padding=(0, 0),
-        borderwidth=0,
-        highlightthickness=0,
-        background=gui_colors['BG #4'],
-        foreground=gui_colors['Normal #4'])
-    style.configure(
-        'Treeview',
-        padding=(0, 0),
-        borderwidth=0,
-        highlightthickness=0,
-        fieldbackground=gui_colors['BG #3'],
-        foreground=gui_colors['Normal #3'])
-    style.configure(
-        "TCombobox",
-        padding=(0, 0),
-        borderwidth=0,
-        highlightthickness=0,
-        background=gui_colors['BG #1'],
-        selectbackground=gui_colors['BG #4'],
-        foreground=gui_colors['Normal #2'],
-        selectforeground=gui_colors['Normal #1'],
-        arrowsize=15,
-        arrowcolor=gui_colors['Bright #3'],
-        font=("Arial", 12))
-    style.configure(
-        "TEntry",
-        fieldbackground=gui_colors['BG #1'])
-    return style
+                    bg=ui_colors[lst[1]],
+                    fg=ui_colors[lst[2]],
+                    font=lst[3])
+                window.list_w[lst[0]].place(
+                    x=lst[4], y=lst[5], height=lst[6], width=lst[7])
 
 
 class DatTool:

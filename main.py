@@ -39,7 +39,7 @@ class Mother(ShowBase):
 
         self.load_rpsystem()
         self.initialize_the_view()
-        self.ttk_style = tlz.get_basic_style(
+        self.ttk_style = tlz.TkTool.set_colors(
             self.the_user.player_data.ui_colors)
 
         self.bg_image_path = 'rec/ui/uibg.png'
